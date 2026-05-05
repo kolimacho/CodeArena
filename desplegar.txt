@@ -1,0 +1,11 @@
+# Construir y levantar los contenedores
+docker-compose up --build -d
+
+# Ver logs
+docker-compose logs -f
+
+# Detener servicios
+docker-compose down
+
+# Acceder a la aplicación
+# Abrir navegador en http://localhost:8080

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeArena — Retos de Código</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+    <div class="logo" onclick="showSection('hero')" style="cursor:pointer">code<span>arena</span></div>
+    <div class="nav-links">
+        <a href="#" onclick="showSection('retos')">Retos</a>
+        <a href="#" onclick="showSection('ranking')">Ranking</a>
+        <a href="#" id="nav-admin" style="display:none" onclick="showSection('admin')">
+            <span class="admin-badge">Admin</span>
+        </a>
+        <div id="auth-buttons">
+            <button class="nav-btn" onclick="showLoginModal()">Login</button>
+            <button class="nav-btn nav-btn-primary" onclick="showRegisterModal()">Registro</button>
+        </div>
+        <div id="user-menu" style="display:none;">
+            <div class="user-info">
+                <span class="user-avatar-nav" id="nav-avatar">👤</span>
+                <span id="username-display"></span>
+                <span class="user-pts-nav" id="nav-pts">0 pts</span>
+            </div>
+            <button class="nav-btn" onclick="logout()">Salir</button>
+        </div>
+    </div>
+    <button class="nav-menu-toggle" id="nav-toggle" onclick="toggleMobileNav()">☰</button>
+</nav>
+
+<!-- ==================== HERO ==================== -->
+<section id="section-hero">
+    <div class="hero">
+        <div class="hero-tag">Plataforma de retos de programación</div>
+        <h1>Practica código.<br><span>Sube al ranking.</span></h1>
+        <p>Resuelve algoritmos reales, compite con otros programadores y demuestra tus habilidades.</p>
+        <div class="hero-actions">
+            <button class="btn" onclick="showSection('retos')">Ver retos →</button>
+            <button class="btn btn-outline" onclick="showSection('ranking')">Ver ranking</button>
+        </div>
+        <div class="stats">
+            <div class="stat">
+                <span class="stat-num" id="stat-retos">—</span>
+                <span class="stat-label">Retos</span>
+            </div>
+            <div class="stat">
+                <span class="stat-num" id="stat-usuarios">—</span>
+                <span class="stat-label">Usuarios</span>
+            </div>
+            <div class="stat">
+                <span class="stat-num" id="stat-envios">—</span>
+                <span class="stat-label">Envíos</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== RETOS ==================== -->
+<section id="section-retos" class="section" style="display:none">
+    <div class="section-header">
+        <h2 class="section-title">Retos de código</h2>
+        <span class="section-count" id="retos-count"></span>
+    </div>
+    <div class="filtros">
+        <button class="filtro-btn activo" onclick="filtrarRetos('all', this)">Todos</button>
+        <button class="filtro-btn filtro-easy" onclick="filtrarRetos('easy', this)">Fácil</button>
+        <button class="filtro-btn filtro-medium" onclick="filtrarRetos('medium', this)">Medio</button>
+        <button class="filtro-btn filtro-hard" onclick="filtrarRetos('hard', this)">Difícil</button>
+    </div>
+    <div class="grid" id="grid">
+        <div class="loading"><div class="spinner"></div>Cargando retos...</div>
+    </div>
+</section>
+
+<!-- ==================== RANKING ==================== -->
+<section id="section-ranking" class="section" style="display:none">
+    <h2 class="section-title">Ranking global</h2>
+    <div class="lb-tabla" id="ranking-tabla">
+        <div class="loading"><div class="spinner"></div>Cargando ranking...</div>
+    </div>
+</section>
+
+<!-- ==================== ADMIN ==================== -->
+<section id="section-admin" class="section admin-panel" style="display:none">
+    <h2 class="section-title">Panel de administración</h2>
+
+    <div class="admin-tabs">
+        <button class="admin-tab activo" onclick="switchAdminTab('submissions', this)">
+            📋 Envíos
+        </button>
+        <button class="admin-tab" onclick="switchAdminTab('users', this)">
+            👥 Usuarios
+        </button>
+        <button class="admin-tab" onclick="switchAdminTab('challenges', this)">
+            🏆 Retos
+        </button>
+    </div>
+
+    <!-- Tab: Envíos -->
+    <div id="admin-tab-submissions" class="admin-content">
+        <div class="admin-toolbar">
+            <input type="text" class="admin-search" id="search-submissions"
+                   placeholder="Buscar por usuario o reto..." oninput="filterSubmissionsTable(this.value)">
+            <select id="filter-resultado" onchange="loadAdminSubmissions()" class="admin-select">
+                <option value="">Todos los resultados</option>
+                <option value="success">✅ Aprobados</option>
+                <option value="failed">❌ Fallidos</option>
+                <option value="pending">⏳ Pendientes</option>
+            </select>
+        </div>
+        <div id="submissions-container">
+            <div class="loading"><div class="spinner"></div></div>
+        </div>
+    </div>
+
+    <!-- Tab: Usuarios -->
+    <div id="admin-tab-users" class="admin-content" style="display:none">
+        <div class="admin-toolbar">
+            <input type="text" class="admin-search" id="search-users"
+                   placeholder="Buscar usuario..." oninput="filterUsersTable(this.value)">
+        </div>
+        <div id="users-container">
+            <div class="loading"><div class="spinner"></div></div>
+        </div>
+    </div>
+
+    <!-- Tab: Retos -->
+    <div id="admin-tab-challenges" class="admin-content" style="display:none">
+        <div class="admin-toolbar">
+            <button class="btn btn-sm" onclick="showRetoAdminModal()">+ Nuevo reto</button>
+        </div>
+        <div id="challenges-container">
+            <div class="loading"><div class="spinner"></div></div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== MODAL LOGIN ==================== -->
+<div id="loginModal" class="modal">
+    <div class="modal-content">
+        <button class="modal-close" onclick="closeModal('loginModal')">&times;</button>
+        <h2>Iniciar sesión</h2>
+        <div id="login-error" class="form-error" style="display:none"></div>
+        <form id="loginForm">
+            <label for="login-username">Usuario o email</label>
+            <input type="text" id="login-username" autocomplete="username" required>
+            <label for="login-password">Contraseña</label>
+            <input type="password" id="login-password" autocomplete="current-password" required>
+            <button type="submit" class="btn-form" id="login-submit">Entrar</button>
+        </form>
+        <p class="modal-switch">
+            ¿No tienes cuenta?
+            <a href="#" onclick="switchModal('loginModal','registerModal')">Regístrate gratis</a>
+        </p>
+    </div>
+</div>
+
+<!-- ==================== MODAL REGISTRO ==================== -->
+<div id="registerModal" class="modal">
+    <div class="modal-content">
+        <button class="modal-close" onclick="closeModal('registerModal')">&times;</button>
+        <h2>Crear cuenta</h2>
+        <div id="register-error" class="form-error" style="display:none"></div>
+        <form id="registerForm">
+            <label for="reg-username">Nombre de usuario</label>
+            <input type="text" id="reg-username" autocomplete="username" required>
+            <label for="reg-email">Email</label>
+            <input type="email" id="reg-email" autocomplete="email" required>
+            <label for="reg-password">Contraseña</label>
+            <input type="password" id="reg-password" autocomplete="new-password" required>
+            <button type="submit" class="btn-form" id="register-submit">Crear cuenta</button>
+        </form>
+        <p class="modal-switch">
+            ¿Ya tienes cuenta?
+            <a href="#" onclick="switchModal('registerModal','loginModal')">Inicia sesión</a>
+        </p>
+    </div>
+</div>
+
+<!-- ==================== MODAL EDITOR DE RETO ==================== -->
+<div id="retoModal" class="modal-fullscreen">
+    <div class="editor-layout">
+
+        <!-- Panel izquierdo: descripción del problema -->
+        <div class="editor-panel-desc" id="editor-panel-desc">
+            <div class="editor-desc-header">
+                <button class="close-editor" onclick="closeRetoModal()" title="Cerrar">✕</button>
+                <div id="reto-header-info"></div>
+            </div>
+            <div class="editor-desc-body" id="reto-desc-body">
+                <!-- Contenido dinámico -->
+            </div>
+        </div>
+
+        <!-- Separador redimensionable -->
+        <div class="editor-divider" id="editor-divider"></div>
+
+        <!-- Panel derecho: editor de código -->
+        <div class="editor-panel-code" id="editor-panel-code">
+            <div class="editor-code-header">
+                <select id="lang-selector" onchange="changeEditorLanguage(this.value)" class="lang-select">
+                    <option value="javascript">JavaScript</option>
+                    <option value="python">Python</option>
+                    <option value="java">Java</option>
+                    <option value="cpp">C++</option>
+                </select>
+                <div class="editor-actions">
+                    <button class="btn-run" id="btn-run" onclick="runTests()">
+                        ▶ Ejecutar
+                    </button>
+                    <button class="btn-submit" id="btn-submit" onclick="enviarSolucion()">
+                        Enviar solución
+                    </button>
+                </div>
+            </div>
+
+            <!-- Monaco Editor -->
+            <div id="monaco-container"></div>
+
+            <!-- Panel de resultados de tests -->
+            <div class="test-panel" id="test-panel" style="display:none">
+                <div class="test-panel-header">
+                    <span id="test-summary"></span>
+                    <button class="test-close" onclick="closeTestPanel()">✕</button>
+                </div>
+                <div class="test-results" id="test-results"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== MODAL VER CÓDIGO (ADMIN) ==================== -->
+<div id="codigoModal" class="modal">
+    <div class="modal-content modal-wide">
+        <button class="modal-close" onclick="closeModal('codigoModal')">&times;</button>
+        <h2>Código enviado</h2>
+        <div id="codigo-meta" class="codigo-meta"></div>
+        <div id="codigo-viewer"></div>
+    </div>
+</div>
+
+<!-- ==================== MODAL EDITAR RETO (ADMIN) ==================== -->
+<div id="retoAdminModal" class="modal">
+    <div class="modal-content modal-wide">
+        <button class="modal-close" onclick="closeModal('retoAdminModal')">&times;</button>
+        <h2 id="admin-reto-modal-title">Nuevo reto</h2>
+        <form id="retoAdminForm">
+            <input type="hidden" id="admin-reto-id">
+            <div class="form-row">
+                <div class="form-col">
+                    <label>Título</label>
+                    <input type="text" id="admin-reto-titulo" required>
+                </div>
+                <div class="form-col">
+                    <label>Categoría</label>
+                    <input type="text" id="admin-reto-categoria" required placeholder="Arrays, Strings, Grafos...">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-col">
+                    <label>Dificultad</label>
+                    <select id="admin-reto-dificultad">
+                        <option value="easy">Fácil</option>
+                        <option value="medium">Medio</option>
+                        <option value="hard">Difícil</option>
+                    </select>
+                </div>
+                <div class="form-col">
+                    <label>Puntos</label>
+                    <input type="number" id="admin-reto-puntos" required min="10" max="1000">
+                </div>
+                <div class="form-col">
+                    <label>Tiempo estimado</label>
+                    <input type="text" id="admin-reto-tiempo" placeholder="ej: 30 min">
+                </div>
+            </div>
+            <label>Descripción (Markdown soportado)</label>
+            <textarea id="admin-reto-descripcion" rows="6" required></textarea>
+            <button type="submit" class="btn-form">Guardar reto</button>
+        </form>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer>
+    <p>CodeArena &copy; 2025 &mdash; Trabajo de Final de Grado &middot; 2º DAW</p>
+</footer>
+
+<!-- Toast container -->
+<div id="toast-container"></div>
+
+<!-- Monaco Editor (CDN) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
+<script>
+    require.config({
+        paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs' }
+    });
+</script>
+
+<script src="js/app.js"></script>
+</body>
+</html>
