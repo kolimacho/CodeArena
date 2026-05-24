@@ -39,7 +39,7 @@ try {
     $reto['completados'] = (int) $reto['completados'];
     $reto['activo']      = (bool) $reto['activo'];
 
-    echo json_encode($reto);
+    echo json_encode($reto, JSON_UNESCAPED_UNICODE);
 
 } catch (PDOException $e) {
     http_response_code(500);

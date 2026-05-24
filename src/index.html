@@ -30,7 +30,6 @@
             <button class="nav-btn" onclick="logout()">Salir</button>
         </div>
     </div>
-    <button class="nav-menu-toggle" id="nav-toggle" onclick="toggleMobileNav()">☰</button>
 </nav>
 
 <!-- ==================== HERO ==================== -->
@@ -42,20 +41,6 @@
         <div class="hero-actions">
             <button class="btn" onclick="showSection('retos')">Ver retos →</button>
             <button class="btn btn-outline" onclick="showSection('ranking')">Ver ranking</button>
-        </div>
-        <div class="stats">
-            <div class="stat">
-                <span class="stat-num" id="stat-retos">—</span>
-                <span class="stat-label">Retos</span>
-            </div>
-            <div class="stat">
-                <span class="stat-num" id="stat-usuarios">—</span>
-                <span class="stat-label">Usuarios</span>
-            </div>
-            <div class="stat">
-                <span class="stat-num" id="stat-envios">—</span>
-                <span class="stat-label">Envíos</span>
-            </div>
         </div>
     </div>
 </section>
@@ -104,8 +89,6 @@
     <!-- Tab: Envíos -->
     <div id="admin-tab-submissions" class="admin-content">
         <div class="admin-toolbar">
-            <input type="text" class="admin-search" id="search-submissions"
-                   placeholder="Buscar por usuario o reto..." oninput="filterSubmissionsTable(this.value)">
             <select id="filter-resultado" onchange="loadAdminSubmissions()" class="admin-select">
                 <option value="">Todos los resultados</option>
                 <option value="success">✅ Aprobados</option>
@@ -120,10 +103,7 @@
 
     <!-- Tab: Usuarios -->
     <div id="admin-tab-users" class="admin-content" style="display:none">
-        <div class="admin-toolbar">
-            <input type="text" class="admin-search" id="search-users"
-                   placeholder="Buscar usuario..." oninput="filterUsersTable(this.value)">
-        </div>
+        <div class="admin-toolbar"></div>
         <div id="users-container">
             <div class="loading"><div class="spinner"></div></div>
         </div>
@@ -288,7 +268,7 @@
 
 <!-- Footer -->
 <footer>
-    <p>CodeArena &copy; 2025 &mdash; Trabajo de Final de Grado &middot; 2º DAW</p>
+    <p>CodeArena &copy; 2026 &mdash; Trabajo de Final de Grado &middot; 2º DAW</p>
 </footer>
 
 <!-- Toast container -->
@@ -302,6 +282,10 @@
     });
 </script>
 
+<script src="js/utils.js"></script>
+<script src="js/editor.js"></script>
+<script src="js/evaluator.js"></script>
+<script src="js/admin.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>

@@ -1,23 +1,23 @@
-# CodeArena 🏆
+# CodeArena
 
-> Plataforma web de retos de programación — Trabajo de Final de Grado · 2º DAW
+> Plataforma web de retos de programacion - Trabajo de Final de Grado - 2 DAW
 
-CodeArena es una aplicación web SPA (Single Page Application) que permite a los usuarios resolver retos de algoritmia, ganar puntos y competir en un ranking global. Incluye un editor de código integrado (Monaco Editor), ejecución real de JavaScript en el navegador y un panel de administración completo.
+CodeArena es una aplicacion web SPA (Single Page Application) que permite a los usuarios resolver retos de algoritmia, ganar puntos y competir en un ranking global. Incluye un editor de codigo integrado (Monaco Editor), ejecucion real de JavaScript en el navegador y un panel de administracion completo.
 
 ---
 
-## Índice
+## Indice
 
-1. [Descripción del proyecto](#1-descripción-del-proyecto)
-2. [Características principales](#2-características-principales)
-3. [Stack tecnológico](#3-stack-tecnológico)
+1. [Descripcion del proyecto](#1-descripcion-del-proyecto)
+2. [Caracteristicas principales](#2-caracteristicas-principales)
+3. [Stack tecnologico](#3-stack-tecnologico)
 4. [Arquitectura del sistema](#4-arquitectura-del-sistema)
 5. [Estructura de ficheros](#5-estructura-de-ficheros)
 6. [Base de datos](#6-base-de-datos)
 7. [API REST](#7-api-rest)
 8. [Frontend](#8-frontend)
-9. [Panel de administración](#9-panel-de-administración)
-10. [Sistema de evaluación de código](#10-sistema-de-evaluación-de-código)
+9. [Panel de administracion](#9-panel-de-administracion)
+10. [Sistema de evaluacion de codigo](#10-sistema-de-evaluacion-de-codigo)
 11. [Despliegue con Docker](#11-despliegue-con-docker)
 12. [Manual de usuario](#12-manual-de-usuario)
 13. [Manual de administrador](#13-manual-de-administrador)
@@ -26,144 +26,117 @@ CodeArena es una aplicación web SPA (Single Page Application) que permite a los
 
 ---
 
-## 1. Descripción del proyecto
+## 1. Descripcion del proyecto
 
-CodeArena nace como respuesta a la necesidad de una plataforma de práctica de programación en castellano, orientada a estudiantes de ciclos de informática y desarrollo de software. El objetivo es ofrecer un entorno donde los usuarios puedan:
+CodeArena nace como respuesta a la necesidad de una plataforma de practica de programacion en castellano, orientada a estudiantes de ciclos de informatica y desarrollo de software. El objetivo es ofrecer un entorno donde los usuarios puedan:
 
-- Resolver retos de programación de distintas dificultades (fácil, medio, difícil).
-- Escribir y ejecutar código directamente en el navegador sin instalar nada.
-- Comparar su progreso con otros usuarios a través de un ranking de puntos.
-- Recibir retroalimentación inmediata sobre qué tests han pasado y cuáles no.
+- Resolver retos de programacion de distintas dificultades (facil, medio, dificil).
+- Escribir y ejecutar codigo directamente en el navegador sin instalar nada.
+- Comparar su progreso con otros usuarios a traves de un ranking de puntos.
+- Recibir retroalimentacion inmediata sobre que tests han pasado y cuales no.
 
-El proyecto está desplegado con Docker, lo que permite un arranque rápido y un entorno reproducible.
+El proyecto se despliega con Docker, lo que permite un arranque rapido y un entorno reproducible en cualquier maquina.
 
 ---
 
-## 2. Características principales
+## 2. Caracteristicas principales
 
-| Área | Funcionalidad |
+| Area | Funcionalidad |
 |------|---------------|
-| **Autenticación** | Registro, login y logout con sesiones PHP. Contraseñas hasheadas con bcrypt. |
-| **Retos** | Listado con filtro por dificultad. Tarjetas con categoría, descripción, tiempo estimado y puntos. |
-| **Editor de código** | Monaco Editor (el mismo motor que VS Code) integrado via CDN con tema oscuro personalizado. |
-| **Ejecución JS** | El código JavaScript del usuario se ejecuta en el navegador contra los casos de prueba reales. |
+| **Autenticacion** | Registro, login y logout con sesiones PHP. Contrasenas hasheadas con bcrypt. |
+| **Retos** | Listado con filtro por dificultad. Tarjetas con categoria, descripcion, tiempo estimado y puntos. |
+| **Editor de codigo** | Monaco Editor (el mismo motor que VS Code) integrado via CDN con tema oscuro personalizado. |
+| **Ejecucion JS** | El codigo JavaScript del usuario se ejecuta en el navegador contra los casos de prueba reales. |
 | **Feedback de tests** | Muestra input, output esperado y output obtenido para cada test case. |
 | **Ranking** | Top 20 usuarios ordenados por puntos totales. Medallas para el top 3. |
-| **Panel Admin** | Gestión de envíos (ver código), usuarios (toggle admin) y retos (CRUD completo). |
-| **Sistema de puntos** | Los puntos se conceden una sola vez por reto resuelto. Se previene la doble puntuación. |
-| **Stats globales** | Hero section con contador de retos, usuarios y envíos totales. |
-| **Responsive** | Diseño adaptado a móvil, tablet y escritorio. |
+| **Panel Admin** | Gestion de envios (ver codigo), usuarios (toggle admin) y retos (CRUD completo). |
+| **Sistema de puntos** | Los puntos se conceden una sola vez por reto resuelto. Se previene la doble puntuacion. |
+| **Responsive** | Diseno adaptado a movil, tablet y escritorio. |
 
 ---
 
-## 3. Stack tecnológico
+## 3. Stack tecnologico
 
 ### Backend
-| Tecnología | Versión | Uso |
-|---|---|---|
-| PHP | 8.2 | Lógica de servidor, API REST |
+
+| Tecnologia | Version | Uso |
+|------------|---------|-----|
+| PHP | 8.2 | Logica de servidor, API REST |
 | MySQL | 8.0 | Base de datos relacional |
-| Apache | 2.4 | Servidor web (módulo mod_rewrite) |
-| PDO | — | Abstracción de base de datos con prepared statements |
+| Apache | 2.4 | Servidor web con mod_rewrite |
+| PDO | - | Abstraccion de base de datos, prepared statements |
 
 ### Frontend
-| Tecnología | Versión | Uso |
-|---|---|---|
-| HTML5 | — | Estructura semántica de la SPA |
-| CSS3 | — | Estilos, variables CSS, grid, flexbox, animaciones |
-| JavaScript (Vanilla) | ES2022 | Lógica frontend, fetch API, async/await |
-| Monaco Editor | 0.45.0 | Editor de código integrado (CDN) |
+
+| Tecnologia | Version | Uso |
+|------------|---------|-----|
+| HTML5 | - | Estructura semantica de la SPA |
+| CSS3 | - | Estilos, variables CSS, grid, flexbox, animaciones |
+| JavaScript Vanilla | ES2022 | Logica frontend, Fetch API, async/await |
+| Monaco Editor | 0.45.0 | Editor de codigo integrado via CDN |
 
 ### DevOps
-| Tecnología | Uso |
-|---|---|
-| Docker | Contenerización de la aplicación |
-| Docker Compose | Orquestación de servicios (web + db) |
 
-> **Sin frameworks ni dependencias npm.** Todo el frontend es Vanilla JS + CSS puro, lo que facilita la comprensión del código y el despliegue.
+| Tecnologia | Uso |
+|------------|-----|
+| Docker | Contenorizacion de la aplicacion |
+| Docker Compose | Orquestacion de servicios (web + base de datos) |
+
+> Sin frameworks ni dependencias npm. Todo el frontend es Vanilla JS y CSS puro, lo que facilita la comprension del codigo y el despliegue.
 
 ---
 
 ## 4. Arquitectura del sistema
 
-```
-┌─────────────────────────────────────────────────────┐
-│                     NAVEGADOR                        │
-│                                                      │
-│   index.html ──► app.js ──► style.css               │
-│        │              │                              │
-│        │         Monaco Editor (CDN)                 │
-│        │              │                              │
-│        └──── fetch() ─┘                             │
-└──────────────────┬──────────────────────────────────┘
-                   │ HTTP (JSON)
-                   ▼
-┌─────────────────────────────────────────────────────┐
-│               DOCKER: Contenedor Web                 │
-│                                                      │
-│   Apache 2.4 + PHP 8.2                              │
-│   ├── /api/login.php                                │
-│   ├── /api/register.php                             │
-│   ├── /api/get_retos.php                            │
-│   ├── /api/get_reto.php                             │
-│   ├── /api/get_ranking.php                          │
-│   ├── /api/get_stats.php                            │
-│   ├── /api/submit_soluciones.php                    │
-│   ├── /api/admin_submissions.php                    │
-│   ├── /api/admin_users.php                          │
-│   └── /api/admin_retos.php                          │
-└──────────────────┬──────────────────────────────────┘
-                   │ PDO / MySQL protocol
-                   ▼
-┌─────────────────────────────────────────────────────┐
-│               DOCKER: Contenedor DB                  │
-│                                                      │
-│   MySQL 8.0                                         │
-│   └── codearena                                     │
-│       ├── usuarios                                  │
-│       ├── retos                                     │
-│       ├── casos_prueba                              │
-│       ├── envios                                    │
-│       └── soluciones_usuario                        │
-└─────────────────────────────────────────────────────┘
-```
-
-### Flujo de una solicitud típica
+La aplicacion se divide en tres capas: el navegador del usuario, el servidor web PHP dentro de Docker y la base de datos MySQL en otro contenedor Docker.
 
 ```
-Usuario hace click en un reto
-        │
-        ▼
-app.js: abrirReto(id)
-        │
-        ▼
-GET /api/get_reto.php?id=1
-        │
-        ▼
-PHP consulta retos + casos_prueba en MySQL
-        │
-        ▼
-JSON devuelto al cliente
-        │
-        ▼
-Monaco Editor se inicializa con template de inicio
-        │
-        ▼
-Usuario escribe código y pulsa "Ejecutar"
-        │
-        ▼
-JavaScript se ejecuta en el navegador (new Function)
-Resultado comparado con expected_output
-        │
-        ▼
-Usuario pulsa "Enviar solución"
-        │
-        ▼
-POST /api/submit_soluciones.php
-        │
-        ├── Guarda envío en tabla `envios`
-        ├── Actualiza `soluciones_usuario`
-        └── Si es primera vez → suma puntos en `usuarios`
+[NAVEGADOR]
+  index.html + app.js + style.css
+  Monaco Editor (cargado desde CDN)
+        |
+        | HTTP/JSON (fetch API)
+        v
+[DOCKER - Contenedor Web]
+  Apache 2.4 + PHP 8.2
+  Endpoints disponibles:
+    /api/login.php
+    /api/register.php
+    /api/logout.php
+    /api/check_auth.php
+    /api/get_retos.php
+    /api/get_reto.php
+    /api/get_ranking.php
+    /api/get_stats.php
+    /api/submit_soluciones.php
+    /api/admin_submissions.php
+    /api/admin_users.php
+    /api/admin_retos.php
+        |
+        | PDO - MySQL protocol
+        v
+[DOCKER - Contenedor Base de Datos]
+  MySQL 8.0
+  Base de datos: codearena
+    Tablas: usuarios, retos, casos_prueba, envios, soluciones_usuario
+```
+
+### Flujo de una solicitud tipica
+
+```
+1. Usuario hace clic en un reto
+2. app.js llama a GET /api/get_reto.php?id=1
+3. PHP consulta retos + casos_prueba en MySQL
+4. JSON devuelto al navegador
+5. Monaco Editor se inicializa con la plantilla de inicio
+6. Usuario escribe su funcion solution() y pulsa "Ejecutar"
+7. JavaScript se ejecuta en el navegador (new Function)
+8. Resultado comparado con expected_output de cada test
+9. Usuario pulsa "Enviar solucion"
+10. POST /api/submit_soluciones.php
+    - Guarda envio en tabla envios
+    - Actualiza soluciones_usuario
+    - Si es primera vez que lo resuelve: suma puntos al usuario
 ```
 
 ---
@@ -172,138 +145,154 @@ POST /api/submit_soluciones.php
 
 ```
 CodeArena/
-│
-├── docker-compose.yml          # Orquestación de contenedores
-├── Dockerfile                  # Imagen PHP 8.2 + Apache + Node.js
-├── apache-config.conf          # VirtualHost de Apache
-├── .env                        # Variables de entorno (no subir a producción)
-├── desplegar.txt               # Instrucciones de despliegue rápido
-│
-├── sql/
-│   └── init.sql                # Esquema de BD + datos de ejemplo
-│
-└── src/                        # Raíz del servidor web
-    │
-    ├── index.html              # SPA — única página HTML
-    │
-    ├── css/
-    │   └── style.css           # Estilos globales (tema oscuro CodeArena)
-    │
-    ├── js/
-    │   └── app.js              # Toda la lógica frontend
-    │
-    └── api/                    # Endpoints PHP
-        ├── config.php          # Conexión PDO, funciones de autenticación
-        ├── login.php           # POST — autenticación de usuario
-        ├── register.php        # POST — registro de nuevo usuario
-        ├── logout.php          # POST — destruir sesión
-        ├── check_auth.php      # GET  — verificar sesión activa
-        ├── get_retos.php       # GET  — listar retos (con filtro)
-        ├── get_reto.php        # GET  — detalle de un reto + casos de prueba
-        ├── get_ranking.php     # GET  — top 20 usuarios
-        ├── get_stats.php       # GET  — estadísticas globales (hero)
-        ├── submit_soluciones.php # POST — enviar solución de un reto
-        ├── admin_submissions.php # GET  — envíos (solo admin)
-        ├── admin_users.php     # GET/POST — gestión de usuarios (solo admin)
-        ├── admin_retos.php     # GET/POST/PUT/DELETE — gestión de retos (solo admin)
-        └── submit_ranking.php  # (reservado para uso futuro)
+|
++-- docker-compose.yml        Orquestacion de contenedores
++-- Dockerfile                Imagen PHP 8.2 + Apache + Node.js
++-- apache-config.conf        VirtualHost de Apache
++-- .env                      Variables de entorno
++-- README.md                 Documentacion del proyecto
+|
++-- sql/
+|   +-- init.sql              Esquema de BD + datos de ejemplo
+|
++-- src/                      Raiz del servidor web
+    |
+    +-- index.html            SPA - unica pagina HTML
+    |
+    +-- css/
+    |   +-- style.css         Estilos globales (tema oscuro CodeArena)
+    |
+    +-- js/
+    |   +-- app.js            Toda la logica frontend
+    |
+    +-- api/
+        +-- config.php              Conexion PDO, funciones auth
+        +-- login.php               POST - autenticacion
+        +-- register.php            POST - registro de usuario
+        +-- logout.php              POST - cerrar sesion
+        +-- check_auth.php          GET  - verificar sesion activa
+        +-- get_retos.php           GET  - listar retos con filtro
+        +-- get_reto.php            GET  - detalle de un reto
+        +-- get_ranking.php         GET  - top 20 usuarios
+        +-- get_stats.php           GET  - estadisticas globales
+        +-- submit_soluciones.php   POST - enviar solucion
+        +-- admin_submissions.php   GET  - envios (solo admin)
+        +-- admin_users.php         GET/POST - gestion usuarios (solo admin)
+        +-- admin_retos.php         GET/POST/PUT/DELETE - gestion retos (solo admin)
 ```
 
 ---
 
 ## 6. Base de datos
 
-### Diagrama E-R (simplificado)
+### Diagrama de relaciones
 
 ```
-usuarios ──────< soluciones_usuario >────── retos
-    │                                          │
-    └──────────< envios >───────────────────── ┘
-                                               │
+usuarios ------< soluciones_usuario >------ retos
+    |                                          |
+    +----------< envios >---------------------+
+                                               |
                                           casos_prueba
 ```
 
-### Tabla: `usuarios`
+### Tabla: usuarios
 
-| Campo | Tipo | Descripción |
-|---|---|---|
-| `id` | INT PK AUTO_INCREMENT | Identificador único |
-| `username` | VARCHAR(50) UNIQUE | Nombre de usuario |
-| `email` | VARCHAR(100) UNIQUE | Correo electrónico |
-| `password_hash` | VARCHAR(255) | Hash bcrypt de la contraseña |
-| `puntos_total` | INT DEFAULT 0 | Puntuación acumulada |
-| `is_admin` | TINYINT(1) DEFAULT 0 | 1 = administrador |
-| `created_at` | TIMESTAMP | Fecha de registro |
-| `last_login` | TIMESTAMP NULL | Último acceso |
-| `avatar` | VARCHAR(10) DEFAULT '👤' | Emoji de avatar |
+| Campo | Tipo | Descripcion |
+|-------|------|-------------|
+| id | INT PK AUTO_INCREMENT | Identificador unico |
+| username | VARCHAR(50) UNIQUE | Nombre de usuario |
+| email | VARCHAR(100) UNIQUE | Correo electronico |
+| password_hash | VARCHAR(255) | Hash bcrypt de la contrasena |
+| puntos_total | INT DEFAULT 0 | Puntuacion acumulada |
+| is_admin | TINYINT(1) DEFAULT 0 | 1 = administrador |
+| created_at | TIMESTAMP | Fecha de registro |
+| last_login | TIMESTAMP NULL | Ultimo acceso |
+| avatar | VARCHAR(10) | Emoji de avatar |
 
-### Tabla: `retos`
+### Tabla: retos
 
-| Campo | Tipo | Descripción |
-|---|---|---|
-| `id` | INT PK AUTO_INCREMENT | Identificador único |
-| `titulo` | VARCHAR(100) | Nombre del reto |
-| `categoria` | VARCHAR(50) | Arrays, Strings, Grafos... |
-| `dificultad` | ENUM('easy','medium','hard') | Nivel de dificultad |
-| `descripcion` | TEXT | Enunciado (acepta Markdown básico) |
-| `puntos` | INT | Puntos que otorga al resolverlo |
-| `tiempo_estimado` | VARCHAR(20) | Ej: "30 min" |
-| `completados` | INT DEFAULT 0 | Veces que se ha resuelto |
-| `activo` | TINYINT(1) DEFAULT 1 | Soft-delete: 0 = oculto |
-| `created_at` | TIMESTAMP | Fecha de creación |
+| Campo | Tipo | Descripcion |
+|-------|------|-------------|
+| id | INT PK AUTO_INCREMENT | Identificador unico |
+| titulo | VARCHAR(100) | Nombre del reto |
+| categoria | VARCHAR(50) | Arrays, Strings, Grafos... |
+| dificultad | ENUM('easy','medium','hard') | Nivel de dificultad |
+| descripcion | TEXT | Enunciado del reto |
+| puntos | INT | Puntos que otorga al resolverlo |
+| tiempo_estimado | VARCHAR(20) | Ejemplo: "30 min" |
+| completados | INT DEFAULT 0 | Veces que ha sido resuelto |
+| activo | TINYINT(1) DEFAULT 1 | Soft-delete: 0 = oculto |
+| created_at | TIMESTAMP | Fecha de creacion |
 
-### Tabla: `casos_prueba`
+### Tabla: casos_prueba
 
-| Campo | Tipo | Descripción |
-|---|---|---|
-| `id` | INT PK AUTO_INCREMENT | Identificador único |
-| `reto_id` | INT FK → retos | Reto al que pertenece |
-| `input` | TEXT | JSON con los argumentos: `{"nums":[2,7],"target":9}` |
-| `expected_output` | TEXT | JSON con la salida esperada: `[0,1]` |
-| `es_ejemplo` | TINYINT(1) DEFAULT 0 | 1 = visible al usuario como ejemplo |
-| `orden` | INT DEFAULT 0 | Orden de ejecución |
+| Campo | Tipo | Descripcion |
+|-------|------|-------------|
+| id | INT PK AUTO_INCREMENT | Identificador unico |
+| reto_id | INT FK | Reto al que pertenece |
+| input | TEXT | JSON con los argumentos de entrada |
+| expected_output | TEXT | JSON con la salida esperada |
+| es_ejemplo | TINYINT(1) DEFAULT 0 | 1 = visible al usuario como ejemplo |
+| orden | INT DEFAULT 0 | Orden de ejecucion |
 
-### Tabla: `envios`
+Ejemplo de input para el reto "Dos Sumas":
+```json
+{ "nums": [2, 7, 11, 15], "target": 9 }
+```
+Expected output:
+```json
+[0, 1]
+```
 
-| Campo | Tipo | Descripción |
-|---|---|---|
-| `id` | INT PK AUTO_INCREMENT | Identificador único |
-| `usuario_id` | INT FK → usuarios | Usuario que envía |
-| `reto_id` | INT FK → retos | Reto que se intenta |
-| `codigo` | TEXT | Código fuente enviado |
-| `lenguaje` | VARCHAR(20) DEFAULT 'javascript' | Lenguaje de programación |
-| `resultado` | ENUM('pending','success','failed') | Estado del envío |
-| `puntos_obtenidos` | INT DEFAULT 0 | Puntos concedidos |
-| `tiempo_ejecucion` | FLOAT | Tiempo en segundos |
-| `tests_pasados` | INT DEFAULT 0 | Número de tests superados |
-| `tests_total` | INT DEFAULT 0 | Total de tests |
-| `created_at` | TIMESTAMP | Fecha del envío |
+### Tabla: envios
 
-### Tabla: `soluciones_usuario`
+| Campo | Tipo | Descripcion |
+|-------|------|-------------|
+| id | INT PK AUTO_INCREMENT | Identificador unico |
+| usuario_id | INT FK | Usuario que envia |
+| reto_id | INT FK | Reto que se intenta |
+| codigo | TEXT | Codigo fuente enviado |
+| lenguaje | VARCHAR(20) | Lenguaje de programacion |
+| resultado | ENUM('pending','success','failed') | Estado del envio |
+| puntos_obtenidos | INT DEFAULT 0 | Puntos concedidos |
+| tests_pasados | INT DEFAULT 0 | Numero de tests superados |
+| tests_total | INT DEFAULT 0 | Total de tests del reto |
+| tiempo_ejecucion | FLOAT | Tiempo en segundos |
+| created_at | TIMESTAMP | Fecha del envio |
 
-| Campo | Tipo | Descripción |
-|---|---|---|
-| `usuario_id` | INT FK PK | Usuario |
-| `reto_id` | INT FK PK | Reto |
-| `resuelto` | BOOLEAN DEFAULT FALSE | Si ha resuelto el reto alguna vez |
-| `intentos` | INT DEFAULT 0 | Número de envíos totales |
-| `completado_at` | TIMESTAMP NULL | Cuándo lo resolvió por primera vez |
+### Tabla: soluciones_usuario
 
-### Lógica de puntuación
+| Campo | Tipo | Descripcion |
+|-------|------|-------------|
+| usuario_id | INT FK PK | Usuario |
+| reto_id | INT FK PK | Reto |
+| resuelto | BOOLEAN DEFAULT FALSE | Si ha resuelto el reto alguna vez |
+| intentos | INT DEFAULT 0 | Numero de envios totales |
+| completado_at | TIMESTAMP NULL | Cuando lo resolvio por primera vez |
+
+### Logica de puntuacion
 
 ```
-┌─ Usuario envía solución
-│
-├─ ¿Todos los tests pasan?
-│   ├─ NO  → resultado = 'failed', puntos_obtenidos = 0
-│   │         intentos++, NO se suman puntos al usuario
-│   └─ SÍ  → resultado = 'success'
-│             ├─ ¿Ya lo había resuelto antes?
-│             │   ├─ SÍ → intentos++, puntos_obtenidos = 0 (sin doble puntuación)
-│             │   └─ NO → intentos++, puntos_obtenidos = reto.puntos
-│             │            usuarios.puntos_total += reto.puntos
-│             │            retos.completados++
-│             └─ soluciones_usuario.resuelto = TRUE
+Usuario envia solucion
+  |
+  +-- Todos los tests pasan?
+      |
+      +-- NO  --> resultado = 'failed'
+      |          intentos++
+      |          puntos_obtenidos = 0
+      |          NO se suman puntos al usuario
+      |
+      +-- SI  --> resultado = 'success'
+                  intentos++
+                  |
+                  +-- Ya lo habia resuelto antes?
+                      |
+                      +-- SI --> puntos_obtenidos = 0 (sin doble puntuacion)
+                      |
+                      +-- NO --> puntos_obtenidos = reto.puntos
+                                 usuarios.puntos_total += reto.puntos
+                                 retos.completados++
+                                 soluciones_usuario.resuelto = TRUE
 ```
 
 ---
@@ -312,12 +301,12 @@ usuarios ──────< soluciones_usuario >────── retos
 
 Todos los endpoints devuelven `Content-Type: application/json`.
 
-### Endpoints públicos
+### Endpoints publicos
 
-#### `GET /api/get_stats.php`
-Estadísticas globales para la pantalla de inicio.
+#### GET /api/get_stats.php
+Estadisticas globales para la pantalla de inicio.
 
-**Respuesta:**
+Respuesta:
 ```json
 {
   "retos": 10,
@@ -326,17 +315,10 @@ Estadísticas globales para la pantalla de inicio.
 }
 ```
 
----
+#### GET /api/get_retos.php
+Lista los retos activos. Acepta filtro por dificultad mediante el parametro `dificultad` (valores: `easy`, `medium`, `hard`, `all`).
 
-#### `GET /api/get_retos.php`
-Lista los retos activos. Acepta filtro por dificultad.
-
-**Parámetros de query:**
-| Parámetro | Tipo | Ejemplo |
-|---|---|---|
-| `dificultad` | string | `easy`, `medium`, `hard`, `all` (por defecto) |
-
-**Respuesta:**
+Respuesta:
 ```json
 [
   {
@@ -344,7 +326,6 @@ Lista los retos activos. Acepta filtro por dificultad.
     "titulo": "Dos Sumas",
     "categoria": "Arrays",
     "dificultad": "easy",
-    "descripcion": "Dado un array...",
     "puntos": 100,
     "tiempo_estimado": "20 min",
     "completados": 5,
@@ -352,14 +333,11 @@ Lista los retos activos. Acepta filtro por dificultad.
   }
 ]
 ```
-> Si el usuario tiene sesión activa, se incluye el campo `resuelto`.
 
----
+#### GET /api/get_reto.php?id={id}
+Devuelve el detalle completo de un reto incluyendo sus casos de prueba.
 
-#### `GET /api/get_reto.php?id={id}`
-Devuelve el detalle completo de un reto, incluyendo sus casos de prueba.
-
-**Respuesta:**
+Respuesta:
 ```json
 {
   "id": 1,
@@ -367,7 +345,6 @@ Devuelve el detalle completo de un reto, incluyendo sus casos de prueba.
   "dificultad": "easy",
   "puntos": 100,
   "descripcion": "...",
-  "completados": 5,
   "resuelto": false,
   "casos_prueba": [
     {
@@ -381,12 +358,10 @@ Devuelve el detalle completo de un reto, incluyendo sus casos de prueba.
 }
 ```
 
----
+#### GET /api/get_ranking.php
+Devuelve el top 20 de usuarios ordenados por puntuacion.
 
-#### `GET /api/get_ranking.php`
-Devuelve el top 20 de usuarios ordenados por puntuación.
-
-**Respuesta:**
+Respuesta:
 ```json
 {
   "success": true,
@@ -397,24 +372,22 @@ Devuelve el top 20 de usuarios ordenados por puntuación.
       "puntos_total": 8420,
       "resueltos": 12,
       "iniciales": "XK",
-      "medalla": "🥇"
+      "medalla": "primer puesto"
     }
   ],
   "total_usuarios": 42
 }
 ```
 
----
+#### POST /api/login.php
+Autentica al usuario y crea sesion PHP.
 
-#### `POST /api/login.php`
-Autentica al usuario y crea sesión PHP.
-
-**Body:**
+Body:
 ```json
-{ "username": "xKira", "password": "mi_contraseña" }
+{ "username": "xKira", "password": "mi_contrasena" }
 ```
 
-**Respuesta (éxito):**
+Respuesta correcta:
 ```json
 {
   "success": true,
@@ -428,53 +401,32 @@ Autentica al usuario y crea sesión PHP.
 }
 ```
 
-**Respuesta (error):**
+Respuesta de error:
 ```json
-{ "error": "Usuario o contraseña incorrectos" }
+{ "error": "Usuario o contrasena incorrectos" }
 ```
 
----
+#### POST /api/register.php
+Registra un nuevo usuario. Campos obligatorios: `username`, `email`, `password` (minimo 6 caracteres).
 
-#### `POST /api/register.php`
-Registra un nuevo usuario.
-
-**Body:**
-```json
-{ "username": "nuevo", "email": "nuevo@email.com", "password": "min6chars" }
-```
-
-**Validaciones:**
+Validaciones del servidor:
 - Todos los campos son obligatorios
-- Password mínimo 6 caracteres
-- Email con formato válido
-- Username y email deben ser únicos
+- La contrasena debe tener al menos 6 caracteres
+- El email debe tener formato valido
+- El username y el email deben ser unicos en la base de datos
 
----
+#### GET /api/check_auth.php
+Verifica si hay una sesion activa y refresca los datos del usuario desde la base de datos.
 
-#### `GET /api/check_auth.php`
-Verifica si hay una sesión activa y refresca los datos del usuario desde la BD.
+#### POST /api/logout.php
+Destruye la sesion PHP del usuario.
 
-**Respuesta (autenticado):**
-```json
-{
-  "authenticated": true,
-  "user": { "id": 2, "username": "xKira", "puntos_total": 8420, "is_admin": false }
-}
-```
+### Endpoints protegidos (requieren sesion activa)
 
----
+#### POST /api/submit_soluciones.php
+Registra el envio de una solucion y calcula el resultado.
 
-#### `POST /api/logout.php`
-Destruye la sesión PHP.
-
----
-
-### Endpoints protegidos (requieren sesión)
-
-#### `POST /api/submit_soluciones.php`
-Registra el envío de una solución y calcula el resultado.
-
-**Body:**
+Body:
 ```json
 {
   "reto_id": 1,
@@ -487,9 +439,9 @@ Registra el envío de una solución y calcula el resultado.
 }
 ```
 
-> `resultados_cliente`: array con los resultados de ejecutar el código en el navegador (solo para JavaScript). Para otros lenguajes este campo se ignora y se usa la evaluación simulada del servidor.
+El campo `resultados_cliente` contiene los resultados de ejecutar el codigo en el navegador. Solo se usa cuando el lenguaje es JavaScript.
 
-**Respuesta:**
+Respuesta:
 ```json
 {
   "success": true,
@@ -502,109 +454,83 @@ Registra el envío de una solución y calcula el resultado.
 }
 ```
 
----
+### Endpoints de administracion (requieren is_admin = 1)
 
-### Endpoints de administración (requieren `is_admin = 1`)
+#### GET /api/admin_submissions.php
+Lista todos los envios del sistema. Parametros opcionales: `resultado` (filtro por estado), `limit` (maximo de resultados), `id` (detalle de un envio concreto con el codigo fuente).
 
-#### `GET /api/admin_submissions.php`
-Lista todos los envíos del sistema.
+#### GET /api/admin_users.php
+Lista todos los usuarios con estadisticas completas.
 
-**Parámetros opcionales:**
-| Parámetro | Descripción |
-|---|---|
-| `resultado` | Filtrar por `success`, `failed` o `pending` |
-| `limit` | Máximo de resultados (default 100, max 500) |
-| `id` | Si se especifica, devuelve el detalle de ese envío concreto (incluye el código fuente) |
-
----
-
-#### `GET /api/admin_users.php`
-Lista todos los usuarios con estadísticas.
-
-#### `POST /api/admin_users.php`
+#### POST /api/admin_users.php
 Actualiza el rol de un usuario.
 
-**Body:**
+Body:
 ```json
 { "user_id": 3, "is_admin": 1 }
 ```
 
----
+#### GET /api/admin_retos.php
+Lista todos los retos incluyendo los desactivados.
 
-#### `GET /api/admin_retos.php`
-Lista todos los retos (activos e inactivos).
+#### POST /api/admin_retos.php
+Crea un nuevo reto. Campos: `titulo`, `categoria`, `dificultad`, `puntos`, `tiempo_estimado`, `descripcion`.
 
-#### `POST /api/admin_retos.php`
-Crea un nuevo reto.
+#### PUT /api/admin_retos.php
+Actualiza un reto existente. El body debe incluir el campo `id`.
 
-**Body:**
-```json
-{
-  "titulo": "Mi reto",
-  "categoria": "Arrays",
-  "dificultad": "easy",
-  "puntos": 100,
-  "tiempo_estimado": "20 min",
-  "descripcion": "Enunciado del reto..."
-}
-```
-
-#### `PUT /api/admin_retos.php`
-Actualiza un reto existente. El body debe incluir `id`.
-
-#### `DELETE /api/admin_retos.php?id={id}`
-Soft-delete: pone `activo = 0` en lugar de borrar físicamente. Los envíos históricos se conservan.
+#### DELETE /api/admin_retos.php?id={id}
+Desactiva un reto (soft-delete: pone `activo = 0`). Los envios historicos se conservan.
 
 ---
 
 ## 8. Frontend
 
-### SPA (Single Page Application)
+### Estructura de la SPA
 
-La aplicación es una SPA donde todas las secciones están dentro del mismo `index.html`. La navegación se gestiona con JavaScript ocultando/mostrando secciones mediante `display: none / block`.
+La aplicacion es una SPA donde todas las secciones coexisten en el mismo `index.html`. La navegacion se gestiona con JavaScript mostrando y ocultando secciones mediante `display: none / block`.
 
 ```
 index.html
-├── <nav>               → barra de navegación sticky
-├── #section-hero       → pantalla de inicio con stats
-├── #section-retos      → grid de tarjetas de retos
-├── #section-ranking    → tabla de clasificación
-├── #section-admin      → panel de administración (solo admins)
-├── #loginModal         → modal de autenticación
-├── #registerModal      → modal de registro
-├── #retoModal          → editor fullscreen de reto
-├── #codigoModal        → visor de código (admin)
-└── #retoAdminModal     → formulario CRUD de retos (admin)
+  nav                  --> barra de navegacion fija en la parte superior
+  section#section-hero --> pantalla de inicio con estadisticas
+  section#section-retos --> grid de tarjetas de retos
+  section#section-ranking --> tabla de clasificacion
+  section#section-admin --> panel de administracion (solo admins)
+  div#loginModal       --> modal de autenticacion
+  div#registerModal    --> modal de registro
+  div#retoModal        --> editor fullscreen del reto
+  div#codigoModal      --> visor de codigo del admin
+  div#retoAdminModal   --> formulario CRUD de retos para el admin
 ```
 
-### app.js — Organización del código
+### Organizacion del archivo app.js
 
 ```
 app.js
-├── ESTADO GLOBAL           → currentUser, currentRetos, monacoEditor...
-├── INIT                    → DOMContentLoaded: auth + stats + sección inicial
-├── MONACO EDITOR           → initMonaco(), getStarterTemplate(), changeEditorLanguage()
-├── AUTH                    → checkAuth(), login(), register(), logout()
-├── NAVEGACIÓN              → showSection()
-├── STATS                   → loadStats()
-├── RETOS                   → loadRetos(), renderRetos(), filtrarRetos()
-├── RANKING                 → loadRanking(), renderRanking()
-├── MODAL EDITOR            → abrirReto(), renderRetoPanel(), closeRetoModal()
-├── EJECUCIÓN JS            → runTests(), runSingleTest(), renderTestResults()
-├── ENVIAR SOLUCIÓN         → enviarSolucion()
-├── ADMIN — ENVÍOS          → loadAdminSubmissions(), renderAdminSubmissions(), verCodigo()
-├── ADMIN — USUARIOS        → loadAdminUsers(), renderAdminUsers(), toggleAdmin()
-├── ADMIN — RETOS           → loadAdminRetos(), renderAdminRetos(), guardarReto(), eliminarReto()
-├── ADMIN — TABS            → switchAdminTab()
-├── MODALS                  → showLoginModal(), showRegisterModal(), closeModal()
-├── TOASTS                  → showToast()
-├── EVENT LISTENERS         → setupEventListeners()
-└── HELPERS                 → escapeHtml(), formatDate(), difLabel(), markdownBasico()...
+  Estado global       --> currentUser, currentRetos, monacoEditor...
+  Init                --> DOMContentLoaded: auth + seccion inicial
+  Monaco Editor       --> initMonaco(), getStarterTemplate(), changeEditorLanguage()
+  Autenticacion       --> checkAuth(), login(), register(), logout()
+  Navegacion          --> showSection()
+  Retos               --> loadRetos(), renderRetos(), filtrarRetos()
+  Ranking             --> loadRanking(), renderRanking()
+  Modal editor        --> abrirReto(), renderRetoPanel(), closeRetoModal()
+  Ejecucion JS        --> runTests(), runSingleTest(), renderTestResults()
+  Enviar solucion     --> enviarSolucion()
+  Admin - Envios      --> loadAdminSubmissions(), verCodigo()
+  Admin - Usuarios    --> loadAdminUsers(), toggleAdmin()
+  Admin - Retos       --> loadAdminRetos(), guardarReto(), eliminarReto()
+  Admin - Tabs        --> switchAdminTab()
+  Modales             --> showLoginModal(), showRegisterModal(), closeModal()
+  Notificaciones      --> showToast()
+  Event listeners     --> setupEventListeners()
+  Helpers             --> escapeHtml(), formatDate(), difLabel()...
 ```
 
-### Sistema de variables CSS
+### Variables CSS del tema
 
-El tema visual se define mediante variables CSS en `:root`:
+El tema visual se define mediante variables CSS en `:root`. Cambiarlas actualiza toda la apariencia de la aplicacion:
 
 ```css
 :root {
@@ -613,101 +539,89 @@ El tema visual se define mediante variables CSS en `:root`:
     --border:  #2a2a38;   /* Bordes */
     --green:   #00e87a;   /* Color de acento principal */
     --yellow:  #f5c542;   /* Dificultad media / admin */
-    --red:     #ff5a72;   /* Dificultad difícil / errores */
+    --red:     #ff5a72;   /* Dificultad dificil / errores */
     --blue:    #4fa3e0;   /* Badges de lenguaje */
     --text:    #e0e0ec;   /* Texto principal */
     --muted:   #666680;   /* Texto secundario */
 }
 ```
 
-Cambiar estos valores en `style.css` actualiza todo el tema de la aplicación.
-
 ---
 
-## 9. Panel de administración
+## 9. Panel de administracion
 
-El panel de admin es accesible desde la barra de navegación cuando el usuario tiene `is_admin = 1`. Está organizado en tres pestañas:
+El panel de admin es accesible desde la barra de navegacion cuando el usuario tiene `is_admin = 1`. Esta organizado en tres pestanas:
 
-### Pestaña: Envíos
+### Pestana: Envios
 
-- Tabla con todos los envíos del sistema
-- Columnas: usuario, reto, lenguaje, resultado (badge), tests pasados/total, puntos, fecha
-- Filtro por resultado (todos / aprobados / fallidos / pendientes)
-- Búsqueda por usuario o nombre de reto
-- Botón **"Ver código"** → abre un modal con el código fuente en Monaco Editor (solo lectura)
+- Tabla con todos los envios del sistema
+- Columnas: usuario, reto, lenguaje, resultado, tests pasados/total, puntos, fecha
+- Filtro por resultado: todos / aprobados / fallidos / pendientes
+- Boton "Ver codigo" que abre el codigo fuente del envio en un visor de texto
 
-### Pestaña: Usuarios
+### Pestana: Usuarios
 
-- Tabla con todos los usuarios registrados
-- Columnas: username, email, puntos, retos resueltos, rol, fecha de registro, último acceso
-- Búsqueda por usuario o email
-- Botón **"Hacer admin"** / **"Quitar admin"** con confirmación
-- El admin no puede quitarse sus propios permisos (validado en backend)
+- Tabla con todos los usuarios registrados y sus estadisticas
+- Columnas: username, email, puntos, retos resueltos, rol, fecha de registro, ultimo acceso
+- Boton "Hacer admin" o "Quitar admin" con confirmacion previa
+- Un admin no puede quitarse sus propios permisos (validado en el backend)
 
-### Pestaña: Retos
+### Pestana: Retos
 
 - Tabla con todos los retos (activos e inactivos)
-- Columnas: título, categoría, dificultad, puntos, resueltos, estado (activo/inactivo)
-- Botón **"+ Nuevo reto"** → abre formulario modal con todos los campos
-- Botón **"Editar"** → precarga el formulario con los datos del reto
-- Botón **"Eliminar"** → soft-delete (activo = 0), no borra el historial de envíos
+- Columnas: titulo, categoria, dificultad, puntos, resueltos, estado
+- Boton "+ Nuevo reto" que abre un formulario modal con todos los campos
+- Boton "Editar" que precarga el formulario con los datos del reto seleccionado
+- Boton "Eliminar" que realiza un soft-delete (activo = 0)
 
 ---
 
-## 10. Sistema de evaluación de código
+## 10. Sistema de evaluacion de codigo
 
-### JavaScript (ejecución en el navegador)
+### JavaScript: ejecucion en el navegador
 
-Para JavaScript, el código se ejecuta directamente en el navegador del usuario usando `new Function()`. Este enfoque permite retroalimentación instantánea sin necesidad de servidor.
+Para JavaScript, el codigo del usuario se ejecuta directamente en el navegador mediante `new Function()`. Esto permite retroalimentacion instantanea sin necesidad de un servidor de ejecucion.
 
-**Flujo:**
+Como funciona:
 
 ```javascript
-// 1. Se crea una función dinámica con los parámetros del test case
+// 1. Se obtiene el input del caso de prueba
+const input = JSON.parse('{"nums":[2,7,11,15],"target":9}');
+// input = { nums: [2,7,11,15], target: 9 }
+
+// 2. Se crea una funcion dinamica con el codigo del usuario
 const fn = new Function(
-    ...Object.keys(input),          // ["nums", "target"]
-    `"use strict";
-     ${userCode}                    // código del usuario
-     return solution(...args);`
+    'nums', 'target',          // nombres de los parametros
+    '"use strict";' +
+    userCode +                 // codigo escrito por el usuario
+    'return solution(nums, target);'
 );
 
-// 2. Se ejecuta con los valores del test case
-const actual = fn(...Object.values(input));  // fn([2,7,11,15], 9)
+// 3. Se ejecuta con los valores del caso de prueba
+const actual = fn([2,7,11,15], 9);
 
-// 3. Se compara con el output esperado
-const passed = JSON.stringify(actual) === JSON.stringify(expected);
-// "[0,1]" === "[0,1]"  → true
+// 4. Se compara con el output esperado
+const passed = JSON.stringify(actual) === JSON.stringify([0,1]);
+// "[0,1]" === "[0,1]" --> true
 ```
 
-**Formato de casos de prueba:**
-
-Los casos de prueba se almacenan en JSON en la BD. Las claves del objeto son los nombres de los parámetros de la función `solution`:
-
-```json
-{ "nums": [2, 7, 11, 15], "target": 9 }
-```
-
-El sistema extrae automáticamente los nombres de parámetros para generar la plantilla de código:
+Los nombres de los parametros se extraen automaticamente de las claves del JSON del caso de prueba, y se usan para generar la plantilla inicial que ve el usuario en el editor:
 
 ```javascript
 function solution(nums, target) {
-    // Escribe tu código aquí
+    // Escribe tu codigo aqui
+
 }
 ```
 
-**Limitaciones conocidas:**
-- No hay sandboxing real: código malicioso podría usar `setTimeout` o bucles infinitos
-- Solo funciona para JavaScript
-- No hay límite de tiempo de ejecución (para una solución completa se usaría un Web Worker)
+### Otros lenguajes
 
-### Otros lenguajes (Python, Java, C++)
-
-Para lenguajes distintos a JavaScript, el servidor usa una función de evaluación simulada (`simularEvaluacion()`). En un entorno de producción real se integraría con **Judge0** (API open-source de ejecución de código en sandbox).
+Para Python, Java y C++, la evaluacion es simulada en el servidor. En un entorno de produccion se integraria con Judge0, que es una API open-source para ejecutar codigo en un entorno aislado (sandbox).
 
 ```php
-function simularEvaluacion(string $codigo, string $input, string $expected): bool {
-    // TODO: Integrar con Judge0 o similar
-    return rand(0, 100) > 30;  // Simulación con 70% de éxito
+function simularEvaluacion($codigo, $input, $expected): bool {
+    // TODO: Integrar con Judge0 en produccion
+    return rand(0, 100) > 30;
 }
 ```
 
@@ -717,10 +631,10 @@ function simularEvaluacion(string $codigo, string $input, string $expected): boo
 
 ### Requisitos previos
 
-- Docker Desktop instalado y en ejecución
-- Git (para clonar el repositorio)
+- Docker Desktop instalado y en ejecucion
+- Git instalado
 
-### Pasos de despliegue
+### Pasos para desplegar
 
 ```bash
 # 1. Clonar el repositorio
@@ -730,171 +644,152 @@ cd CodeArena
 # 2. Construir y arrancar los contenedores
 docker-compose up --build -d
 
-# 3. La aplicación estará disponible en:
-#    http://localhost:8080
+# 3. Abrir la aplicacion en el navegador
+# http://localhost:8080
 ```
 
-### Parar la aplicación
+La primera vez tarda entre 2 y 3 minutos porque Docker descarga las imagenes base y compila las extensiones de PHP.
+
+### Comandos utiles
 
 ```bash
-docker-compose down          # Para los contenedores
-docker-compose down -v       # Para los contenedores Y borra la BD
-```
+# Ver logs en tiempo real
+docker-compose logs -f web
 
-### Reiniciar solo la BD (para reimportar el SQL)
+# Parar los contenedores
+docker-compose down
 
-```bash
+# Parar y borrar la base de datos (reinicio completo)
 docker-compose down -v
 docker-compose up --build -d
+
+# Ver el estado de los contenedores
+docker-compose ps
 ```
 
-### Configuración de Docker Compose
-
-```yaml
-services:
-  web:                          # Contenedor PHP + Apache
-    build: .                    # Usa el Dockerfile del proyecto
-    ports:
-      - "8080:80"               # Puerto local → puerto del contenedor
-    volumes:
-      - ./src:/var/www/html     # El código se monta en vivo (hot reload)
-    environment:
-      - DB_HOST=db
-      - DB_NAME=codearena
-      - DB_USER=codearena_user
-      - DB_PASSWORD=codearena_pass
-
-  db:                           # Contenedor MySQL 8.0
-    image: mysql:8.0
-    ports:
-      - "3306:3306"             # Permite conexión con clientes externos (DBeaver, etc.)
-    volumes:
-      - db_data:/var/lib/mysql  # Persistencia de datos
-      - ./sql:/docker-entrypoint-initdb.d  # SQL se ejecuta al arrancar
-```
-
-### Conectar a la BD con un cliente externo
+### Conectar a la base de datos con un cliente externo (DBeaver, TablePlus...)
 
 ```
 Host:     localhost
 Puerto:   3306
 Usuario:  codearena_user
-Password: codearena_pass
-BD:       codearena
+Contrasena: codearena_pass
+Base de datos: codearena
+```
+
+### Descripcion del Dockerfile
+
+```dockerfile
+FROM php:8.2-apache
+
+# Extensiones PHP necesarias para MySQL
+RUN docker-php-ext-install mysqli pdo pdo_mysql
+
+# Activar mod_rewrite de Apache
+RUN a2enmod rewrite
+
+# Node.js (disponible para uso futuro: compilacion, Judge0...)
+RUN apt-get update && apt-get install -y nodejs npm
+
+# Configuracion del VirtualHost de Apache
+COPY apache-config.conf /etc/apache2/sites-available/000-default.conf
 ```
 
 ---
 
 ## 12. Manual de usuario
 
-### Registro e inicio de sesión
+### Registro e inicio de sesion
 
-1. Pulsar **"Registro"** en la barra de navegación
-2. Introducir nombre de usuario, email y contraseña (mínimo 6 caracteres)
-3. Pulsar **"Crear cuenta"** → sesión iniciada automáticamente
+1. Pulsar el boton "Registro" en la barra de navegacion superior.
+2. Introducir nombre de usuario, email y contrasena (minimo 6 caracteres).
+3. Pulsar "Crear cuenta". La sesion se inicia automaticamente.
 
-Para iniciar sesión en una cuenta existente, pulsar **"Login"** e introducir usuario o email y contraseña.
+Para iniciar sesion en una cuenta existente: pulsar "Login" e introducir el usuario o email junto con la contrasena.
 
 ### Resolver un reto
 
-1. Ir a la sección **"Retos"** (se carga por defecto al entrar)
-2. Filtrar por dificultad si se desea: Fácil / Medio / Difícil
-3. Hacer clic en cualquier tarjeta de reto
-4. Se abre el editor fullscreen:
-   - **Panel izquierdo:** enunciado del problema, ejemplos de entrada/salida, información adicional
-   - **Panel derecho:** editor Monaco con resaltado de sintaxis
-5. Seleccionar el lenguaje de programación en el desplegable
-6. Escribir la función `solution(...)` en el editor
-7. Pulsar **"▶ Ejecutar"** para probar contra los casos de prueba visibles
-8. El panel inferior muestra el resultado de cada test (input, esperado, obtenido)
-9. Cuando el código sea correcto, pulsar **"Enviar solución"**
-10. Si todos los tests pasan → se ganan los puntos del reto (una sola vez)
+1. Entrar en la seccion "Retos" (se carga por defecto al abrir la web).
+2. Filtrar por dificultad si se desea: Facil, Medio o Dificil.
+3. Hacer clic en la tarjeta del reto que se quiera resolver.
+4. Se abre el editor a pantalla completa:
+   - Panel izquierdo: enunciado del problema y ejemplos de entrada/salida.
+   - Panel derecho: editor Monaco con resaltado de sintaxis.
+5. Seleccionar el lenguaje de programacion en el desplegable superior.
+6. Escribir la funcion `solution(...)` en el editor.
+7. Pulsar el boton "Ejecutar" para probar el codigo contra los casos de prueba.
+8. El panel inferior muestra el resultado de cada test (input, esperado, obtenido).
+9. Cuando el codigo sea correcto, pulsar "Enviar solucion".
+10. Si todos los tests pasan, se suman los puntos al perfil (solo la primera vez).
 
-### Notas importantes sobre el editor
-
-- El código debe definir una función llamada **`solution`**
-- Los parámetros se extraen automáticamente de los casos de prueba
-- La ejecución es inmediata en el navegador para JavaScript
-- Para Python, Java y C++ la ejecución es simulada (en desarrollo)
-- Pulsar `ESC` o el botón `✕` para cerrar el editor
+Nota: pulsar la tecla Escape o el boton de cerrar cierra el editor sin enviar.
 
 ### Ver el ranking
 
-Ir a la sección **"Ranking"** para ver el top 20 de usuarios. El puesto actual del usuario autenticado se resalta en verde.
+Acceder a la seccion "Ranking" desde la barra de navegacion. Se muestran los 20 mejores usuarios ordenados por puntos totales. El usuario autenticado aparece resaltado en verde.
 
 ---
 
 ## 13. Manual de administrador
 
-El panel de administración está disponible en la barra de navegación como **"Admin"** para los usuarios con `is_admin = 1`.
+El enlace "Admin" aparece en la barra de navegacion solo para usuarios con `is_admin = 1`.
 
-### Acceder al panel
+### Gestion de envios
 
-Iniciar sesión con una cuenta de administrador → aparece el enlace "Admin" en la barra de navegación → hacer clic.
+1. Abrir el panel de administracion. La pestana "Envios" se carga por defecto.
+2. Usar el desplegable para filtrar por resultado.
+3. Pulsar "Ver codigo" en cualquier fila para ver el codigo fuente del envio.
 
-### Gestionar envíos
+### Gestion de usuarios
 
-1. La pestaña **"📋 Envíos"** se carga por defecto al entrar al panel
-2. Filtrar por resultado con el desplegable
-3. Buscar por nombre de usuario o reto en el campo de búsqueda
-4. Pulsar **"Ver código"** en cualquier fila para abrir el código en Monaco Editor (solo lectura)
+1. Ir a la pestana "Usuarios".
+2. Se muestra la lista completa de usuarios con sus estadisticas.
+3. Pulsar "Hacer admin" para conceder permisos de administrador.
+4. Pulsar "Quitar admin" para retirar los permisos (no aplica sobre uno mismo).
 
-### Gestionar usuarios
+### Gestion de retos
 
-1. Ir a la pestaña **"👥 Usuarios"**
-2. Ver la lista completa de usuarios registrados con sus estadísticas
-3. Pulsar **"Hacer admin"** para conceder permisos de administrador a un usuario
-4. Pulsar **"Quitar admin"** para retirar los permisos (no se puede aplicar a uno mismo)
-
-### Gestionar retos
-
-1. Ir a la pestaña **"🏆 Retos"**
-2. Pulsar **"+ Nuevo reto"** para crear un reto nuevo con el formulario
-3. Pulsar **"Editar"** para modificar un reto existente
-4. Pulsar **"Eliminar"** para desactivar un reto (soft-delete: queda guardado en BD pero no se muestra a los usuarios)
-5. Para añadir casos de prueba a un reto nuevo, hacerlo directamente en la BD o con un cliente MySQL
-
-> **Nota:** Los casos de prueba actualmente se gestionan directamente en la base de datos. Una mejora futura sería añadir una interfaz en el panel admin para ello.
+1. Ir a la pestana "Retos".
+2. Pulsar "+ Nuevo reto" para crear un reto con el formulario.
+3. Pulsar "Editar" para modificar un reto existente.
+4. Pulsar "Eliminar" para desactivar un reto (permanece en la base de datos pero no se muestra a los usuarios).
 
 ---
 
 ## 14. Credenciales por defecto
 
-Estas credenciales se crean automáticamente al levantar Docker por primera vez:
+Estos usuarios se crean automaticamente al levantar Docker por primera vez mediante el archivo `sql/init.sql`.
 
-| Usuario | Email | Contraseña | Rol |
-|---|---|---|---|
-| `admin` | admin@codearena.dev | `password` | Administrador |
-| `xKira` | xkira@example.com | `password` | Usuario |
-| `nullPointer` | null@example.com | `password` | Usuario |
-| `bytewitch` | byte@example.com | `password` | Usuario |
+| Usuario | Email | Contrasena | Rol |
+|---------|-------|------------|-----|
+| admin | admin@codearena.dev | password | Administrador |
+| xKira | xkira@example.com | password | Usuario |
+| nullPointer | null@example.com | password | Usuario |
+| bytewitch | byte@example.com | password | Usuario |
 
-> ⚠️ **Cambiar las contraseñas antes de un despliegue en producción.**
+**Importante:** cambiar las contrasenas antes de cualquier despliegue en produccion.
 
 ---
 
 ## 15. Posibles mejoras futuras
 
 | Prioridad | Mejora |
-|---|---|
-| Alta | Integración con **Judge0** para ejecución segura de Python, Java y C++ en servidor |
-| Alta | Gestión de casos de prueba desde el panel admin (actualmente requiere acceso directo a BD) |
-| Alta | **Web Worker** para ejecutar el JS del usuario con timeout real y sin bloquear el hilo principal |
-| Media | Página de perfil de usuario con historial de retos resueltos y envíos |
-| Media | Sistema de **rachas** (días consecutivos resolviendo retos) |
-| Media | **Modo oscuro / claro** configurable por el usuario |
-| Media | Paginación en la tabla de envíos del panel admin |
-| Baja | Notificaciones en tiempo real con WebSockets cuando alguien sube al ranking |
-| Baja | Soporte para **Markdown completo** en las descripciones de retos |
-| Baja | Exportar el código a un fichero desde el editor |
-| Baja | Historial de envíos para cada reto (ver intentos anteriores) |
+|-----------|--------|
+| Alta | Integracion con Judge0 para ejecucion segura de Python, Java y C++ en el servidor |
+| Alta | Gestion de casos de prueba desde el panel admin (actualmente se hace directamente en la BD) |
+| Alta | Uso de Web Worker para ejecutar el JS del usuario con timeout real sin bloquear el navegador |
+| Media | Pagina de perfil de usuario con historial de retos resueltos y envios |
+| Media | Sistema de rachas (dias consecutivos resolviendo retos) |
+| Media | Paginacion en la tabla de envios del panel admin |
+| Baja | Notificaciones en tiempo real cuando alguien sube posiciones en el ranking |
+| Baja | Soporte para Markdown completo en las descripciones de retos |
+| Baja | Opcion de exportar el codigo escrito en el editor a un fichero |
+| Baja | Historial de intentos anteriores para cada reto |
 
 ---
 
 ## Licencia
 
-Proyecto académico desarrollado para el **Trabajo de Final de Grado** del ciclo formativo de **Desarrollo de Aplicaciones Web (DAW)**.
+Proyecto academico desarrollado como Trabajo de Final de Grado del ciclo formativo de Desarrollo de Aplicaciones Web (DAW).
 
----
-
-*CodeArena &copy; 2025 — 2º DAW*
+CodeArena 2025 - 2 DAW

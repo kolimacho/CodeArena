@@ -37,7 +37,7 @@ try {
         'success' => true,
         'ranking' => $ranking,
         'total_usuarios' => $pdo->query("SELECT COUNT(*) FROM usuarios")->fetchColumn()
-    ]);
+    ], JSON_UNESCAPED_UNICODE);
     
 } catch(PDOException $e) {
     http_response_code(500);
