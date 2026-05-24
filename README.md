@@ -88,19 +88,19 @@ El proyecto está desplegado con Docker, lo que permite un arranque rápido y un
 
 ```
 ┌─────────────────────────────────────────────────────┐
-│                     NAVEGADOR                        │
-│                                                      │
+│                     NAVEGADOR                       │
+│                                                     │
 │   index.html ──► app.js ──► style.css               │
-│        │              │                              │
-│        │         Monaco Editor (CDN)                 │
-│        │              │                              │
+│        │              │                             │
+│        │         Monaco Editor (CDN)                │
+│        │              │                             │
 │        └──── fetch() ─┘                             │
 └──────────────────┬──────────────────────────────────┘
                    │ HTTP (JSON)
                    ▼
 ┌─────────────────────────────────────────────────────┐
-│               DOCKER: Contenedor Web                 │
-│                                                      │
+│               DOCKER: Contenedor Web                │
+│                                                     │
 │   Apache 2.4 + PHP 8.2                              │
 │   ├── /api/login.php                                │
 │   ├── /api/register.php                             │
@@ -116,8 +116,8 @@ El proyecto está desplegado con Docker, lo que permite un arranque rápido y un
                    │ PDO / MySQL protocol
                    ▼
 ┌─────────────────────────────────────────────────────┐
-│               DOCKER: Contenedor DB                  │
-│                                                      │
+│               DOCKER: Contenedor DB                 │
+│                                                     │
 │   MySQL 8.0                                         │
 │   └── codearena                                     │
 │       ├── usuarios                                  │
@@ -897,4 +897,4 @@ Proyecto académico desarrollado para el **Trabajo de Final de Grado** del ciclo
 
 ---
 
-*CodeArena &copy; 2025 — 2º DAW*
+*CodeArena &copy; 2026 — 2º DAW*
