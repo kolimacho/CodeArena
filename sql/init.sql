@@ -137,7 +137,7 @@ INSERT INTO casos_prueba (reto_id, input, expected_output, es_ejemplo, orden) VA
 -- =====================
 INSERT INTO usuarios (username, email, password_hash, puntos_total, is_admin) VALUES
 ('admin', 'admin@codearena.dev', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 0, 1),
-('xKira', 'xkira@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 8420, 0),
-('nullPointer', 'null@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 7850, 0),
-('bytewitch', 'byte@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 6990, 0);
+('javier', 'javier@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 8420, 0),
+('pepe', 'pepe@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 7850, 0),
+('carlos', 'carlos@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 6990, 0);
 -- Contraseña para todos: "password"
