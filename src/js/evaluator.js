@@ -86,35 +86,19 @@ function renderTestResults(resultados) {
     const allPass = pasados === total;
 
     summary.innerHTML = allPass
-        ? `<span class="badge-success">✅ ${pasados}/${total} tests pasados — ¡Correcto!</span>`
+        ? `<span class="badge-success">✅ ¡Correcto! Todos los tests pasados.</span>`
         : `<span class="badge-error">❌ ${pasados}/${total} tests pasados</span>`;
 
-    resultsDiv.innerHTML = resultados.map((r, i) => {
-        const actualStr = r.error
-            ? `<span style="color:var(--yellow)">⚠ ${escapeHtml(r.error)}</span>`
-            : `<code class="${r.passed ? '' : 'val-wrong'}">${escapeHtml(formatValor(r.actual))}</code>`;
-
-        return `
-        <div class="test-case ${r.passed ? 'test-pass' : 'test-fail'}">
-            <div class="test-case-header">
-                <span>${r.passed ? '✅' : '❌'} Test ${i + 1}</span>
-            </div>
-            <div class="test-case-body">
-                <div class="test-row">
-                    <span class="test-label">Input:</span>
-                    <code>${escapeHtml(formatInput(JSON.stringify(r.input)))}</code>
-                </div>
-                <div class="test-row">
-                    <span class="test-label">Esperado:</span>
-                    <code>${escapeHtml(formatValor(r.expected))}</code>
-                </div>
-                <div class="test-row">
-                    <span class="test-label">Obtenido:</span>
-                    ${actualStr}
-                </div>
-            </div>
-        </div>`;
-    }).join('');
+    // Si hay fallos, mostramos el primer error útil
+    if (!allPass) {
+        const primeroFallido = resultados.find(r => !r.passed);
+        const msg = primeroFallido.error
+            ? `<span style="color:var(--yellow)">⚠ ${escapeHtml(primeroFallido.error)}</span>`
+            : `Esperado: <code>${escapeHtml(formatValor(primeroFallido.expected))}</code> — Obtenido: <code class="val-wrong">${escapeHtml(formatValor(primeroFallido.actual))}</code>`;
+        resultsDiv.innerHTML = `<div class="test-case test-fail"><div class="test-case-body"><div class="test-row">${msg}</div></div></div>`;
+    } else {
+        resultsDiv.innerHTML = '';
+    }
 
     panel.style.display = 'flex';
 }
