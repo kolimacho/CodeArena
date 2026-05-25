@@ -676,16 +676,15 @@ nav {
     flex-shrink: 0;
 }
 
-.lang-select {
-    background: var(--card);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 0.35rem 0.7rem;
+.lang-badge-fixed {
+    background: rgba(79,163,224,0.12);
+    color: var(--blue);
+    border: 1px solid rgba(79,163,224,0.25);
+    padding: 0.3rem 0.8rem;
     border-radius: var(--radius);
-    font-size: 0.85rem;
-    cursor: pointer;
+    font-size: 0.82rem;
+    font-weight: 600;
 }
-.lang-select:focus { outline: none; border-color: var(--green); }
 
 .editor-actions { display: flex; gap: 0.6rem; }
 

@@ -183,12 +183,7 @@
         <!-- Panel derecho: editor de código -->
         <div class="editor-panel-code" id="editor-panel-code">
             <div class="editor-code-header">
-                <select id="lang-selector" onchange="changeEditorLanguage(this.value)" class="lang-select">
-                    <option value="javascript">JavaScript</option>
-                    <option value="python">Python</option>
-                    <option value="java">Java</option>
-                    <option value="cpp">C++</option>
-                </select>
+                <span class="lang-badge-fixed">JavaScript</span>
                 <div class="editor-actions">
                     <button class="btn-run" id="btn-run" onclick="runTests()">
                         ▶ Ejecutar

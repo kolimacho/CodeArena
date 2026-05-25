@@ -1,19 +1,11 @@
 // ============================================================
 // EDITOR.JS — Monaco Editor: inicialización y configuración
 // ============================================================
-// Depende de: utils.js (para showToast)
-// Variables globales que modifica: monacoEditor, monacoReady
-// ============================================================
 
-/**
- * Inicializa Monaco Editor con el tema personalizado de CodeArena.
- * Se llama una sola vez al cargar la página.
- */
 function initMonaco() {
     require(['vs/editor/editor.main'], () => {
         monacoReady = true;
 
-        // Tema personalizado oscuro estilo CodeArena
         monaco.editor.defineTheme('codearena', {
             base: 'vs-dark',
             inherit: true,
@@ -55,31 +47,10 @@ function initMonaco() {
 }
 
 /**
- * Cambia el lenguaje del editor y carga la plantilla correspondiente
- * si el editor está vacío.
- */
-function changeEditorLanguage(lang) {
-    if (!monacoEditor || !monacoReady) return;
-    const model = monacoEditor.getModel();
-    monaco.editor.setModelLanguage(model, lang === 'cpp' ? 'cpp' : lang);
-
-    if (!monacoEditor.getValue().trim()) {
-        monacoEditor.setValue(getStarterTemplate(lang));
-    }
-}
-
-/**
- * Devuelve la plantilla de código inicial para el lenguaje dado.
- * @param {string} lang - javascript | python | java | cpp
+ * Devuelve la plantilla inicial de JavaScript con los parámetros del reto.
  * @param {string[]} params - nombres de los parámetros extraídos del primer test case
  */
-function getStarterTemplate(lang, params = []) {
+function getStarterTemplate(params = []) {
     const paramStr = params.length ? params.join(', ') : '/* parámetros */';
-    const templates = {
-        javascript: `function solution(${paramStr}) {\n    // Escribe tu código aquí\n    \n}`,
-        python:     `def solution(${paramStr}):\n    # Escribe tu código aquí\n    pass`,
-        java:       `class Solution {\n    public Object solution(${paramStr}) {\n        // Escribe tu código aquí\n        return null;\n    }\n}`,
-        cpp:        `#include <bits/stdc++.h>\nusing namespace std;\n\n// Escribe tu solución aquí\n`,
-    };
-    return templates[lang] || templates.javascript;
+    return `function solution(${paramStr}) {\n    // Escribe tu código aquí\n    \n}`;
 }

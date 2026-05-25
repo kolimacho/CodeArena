@@ -220,10 +220,9 @@ async function abrirReto(retoId) {
         currentTestCases = reto.casos_prueba || [];
         renderRetoPanel(reto);
 
-        const lang   = document.getElementById('lang-selector').value;
         const params = currentTestCases.length ? Object.keys(JSON.parse(currentTestCases[0].input)) : [];
         if (monacoReady && monacoEditor) {
-            monacoEditor.setValue(getStarterTemplate(lang, params));
+            monacoEditor.setValue(getStarterTemplate(params));
             monacoEditor.setPosition({ lineNumber: 2, column: 5 });
             monacoEditor.focus();
         }
@@ -342,7 +341,6 @@ window.closeRetoModal      = closeRetoModal;
 window.closeTestPanel      = closeTestPanel;
 window.runTests            = runTests;
 window.enviarSolucion      = enviarSolucion;
-window.changeEditorLanguage = changeEditorLanguage;
 window.switchAdminTab      = switchAdminTab;
 window.verCodigo           = verCodigo;
 window.toggleAdmin         = toggleAdmin;

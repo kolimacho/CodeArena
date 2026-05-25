@@ -1,34 +1,18 @@
 // ============================================================
 // EVALUATOR.JS — Ejecución de código JS en el navegador
 // ============================================================
-// Depende de: utils.js (escapeHtml, formatInput, formatValor, showToast)
-// Variables globales que lee: monacoEditor, monacoReady,
-//                             currentTestCases, currentRetoId, currentUser
-// ============================================================
 
-/**
- * Punto de entrada para ejecutar el código del usuario contra
- * todos los casos de prueba del reto actual.
- * Solo soporta JavaScript (ejecución en browser).
- */
 function runTests() {
     if (!monacoReady || !monacoEditor) return;
 
     const codigo = monacoEditor.getValue().trim();
     if (!codigo) { showToast('Escribe tu solución primero', 'warning'); return; }
 
-    const lang = document.getElementById('lang-selector').value;
-    if (lang !== 'javascript') {
-        showToast('La ejecución en el navegador solo soporta JavaScript por ahora', 'warning');
-        return;
-    }
-
     if (!currentTestCases.length) {
         showToast('No hay casos de prueba disponibles para este reto', 'warning');
         return;
     }
 
-    // Verificar que el código define la función "solution"
     if (!/function\s+solution\s*\(/.test(codigo)) {
         showToast('Tu código debe definir una función llamada "solution"', 'warning');
         return;
@@ -38,31 +22,16 @@ function runTests() {
     renderTestResults(resultados);
 }
 
-/**
- * Ejecuta el código del usuario contra un único caso de prueba.
- * Usa new Function() para ejecutar JS dinámico en el navegador.
- *
- * @param {string} userCode - Código fuente del usuario
- * @param {Object} testCase - { input, expected_output }
- * @returns {{ passed, input, expected, actual, error }}
- */
 function runSingleTest(userCode, testCase) {
     let input, expected;
 
-    // Parsear input (siempre debe ser JSON con clave → valor)
     try {
         input = JSON.parse(testCase.input);
     } catch (e) {
-        return {
-            passed: false,
-            input: testCase.input,
-            expected: null,
-            actual: null,
-            error: 'Error al parsear el input del test: ' + e.message
-        };
+        return { passed: false, input: testCase.input, expected: null, actual: null,
+                 error: 'Error al parsear el input: ' + e.message };
     }
 
-    // Parsear expected (puede ser JSON o string plano)
     try {
         expected = JSON.parse(testCase.expected_output);
     } catch (e) {
@@ -73,13 +42,11 @@ function runSingleTest(userCode, testCase) {
     const paramValues = Object.values(input);
 
     try {
-        // Inyectamos el código del usuario en una función dinámica
-        // y llamamos a solution() con los parámetros del test case
         const body = `
             "use strict";
             ${userCode}
             if (typeof solution !== 'function') {
-                throw new Error('No se encontró la función "solution". Asegúrate de que está definida.');
+                throw new Error('No se encontró la función "solution".');
             }
             return solution(${paramNames.join(', ')});
         `;
@@ -87,32 +54,18 @@ function runSingleTest(userCode, testCase) {
         const fn     = new Function(...paramNames, body);
         const actual = fn(...paramValues);
 
-        // Detectar return olvidado
         if (actual === undefined) {
-            return {
-                passed: false, input, expected, actual: undefined,
-                error: 'Tu función devuelve undefined. ¿Te has olvidado del "return"?'
-            };
+            return { passed: false, input, expected, actual: undefined,
+                     error: 'Tu función devuelve undefined. ¿Te olvidaste del "return"?' };
         }
 
-        const passed = resultadosIguales(actual, expected);
-        return { passed, input, expected, actual, error: null };
+        return { passed: resultadosIguales(actual, expected), input, expected, actual, error: null };
 
     } catch (e) {
         return { passed: false, input, expected, actual: null, error: e.message };
     }
 }
 
-/**
- * Compara dos valores de forma flexible:
- * - JSON.stringify directo (caso más común)
- * - Número vs string ("2" === 2 → true)
- * - Arrays comparados elemento a elemento recursivamente
- *
- * @param {*} actual   - Valor devuelto por la función del usuario
- * @param {*} expected - Valor esperado del test case
- * @returns {boolean}
- */
 function resultadosIguales(actual, expected) {
     if (JSON.stringify(actual) === JSON.stringify(expected)) return true;
     if (String(actual) === String(expected)) return true;
@@ -123,10 +76,6 @@ function resultadosIguales(actual, expected) {
     return false;
 }
 
-/**
- * Renderiza los resultados de los tests en el panel lateral.
- * Muestra un resumen general y el detalle de cada test case.
- */
 function renderTestResults(resultados) {
     const panel      = document.getElementById('test-panel');
     const resultsDiv = document.getElementById('test-results');
@@ -170,16 +119,10 @@ function renderTestResults(resultados) {
     panel.style.display = 'flex';
 }
 
-/** Oculta el panel de resultados de tests */
 function closeTestPanel() {
     document.getElementById('test-panel').style.display = 'none';
 }
 
-/**
- * Envía la solución al servidor.
- * Para JS: ejecuta primero en el navegador y manda los resultados al backend.
- * Para otros lenguajes: el backend los gestiona (requiere Judge0 en producción).
- */
 async function enviarSolucion() {
     if (!currentUser) {
         showToast('Debes iniciar sesión para enviar', 'warning');
@@ -191,15 +134,11 @@ async function enviarSolucion() {
     const codigo = monacoEditor.getValue().trim();
     if (!codigo) { showToast('Escribe tu solución primero', 'warning'); return; }
 
-    const lang = document.getElementById('lang-selector').value;
-    const btn  = document.getElementById('btn-submit');
+    const btn = document.getElementById('btn-submit');
 
-    // Para JS: evaluar en browser y enviar resultados al backend
-    let testResults = [];
-    if (lang === 'javascript' && currentTestCases.length) {
-        testResults = currentTestCases.map(tc => runSingleTest(codigo, tc));
-        renderTestResults(testResults);
-    }
+    // Evaluar en el navegador antes de enviar
+    const testResults = currentTestCases.map(tc => runSingleTest(codigo, tc));
+    renderTestResults(testResults);
 
     btn.textContent = 'Enviando...';
     btn.disabled = true;
@@ -211,11 +150,8 @@ async function enviarSolucion() {
             body: JSON.stringify({
                 reto_id: currentRetoId,
                 codigo,
-                lenguaje: lang,
-                resultados_cliente: testResults.map(r => ({
-                    passed: r.passed,
-                    error:  r.error
-                }))
+                lenguaje: 'javascript',
+                resultados_cliente: testResults.map(r => ({ passed: r.passed, error: r.error }))
             })
         });
         const data = await res.json();
