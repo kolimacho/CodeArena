@@ -107,7 +107,6 @@ La aplicacion se divide en tres capas: el navegador del usuario, el servidor web
     /api/get_retos.php
     /api/get_reto.php
     /api/get_ranking.php
-    /api/get_stats.php
     /api/submit_soluciones.php
     /api/admin_submissions.php
     /api/admin_users.php
@@ -174,7 +173,6 @@ CodeArena/
         +-- get_retos.php           GET  - listar retos con filtro
         +-- get_reto.php            GET  - detalle de un reto
         +-- get_ranking.php         GET  - top 20 usuarios
-        +-- get_stats.php           GET  - estadisticas globales
         +-- submit_soluciones.php   POST - enviar solucion
         +-- admin_submissions.php   GET  - envios (solo admin)
         +-- admin_users.php         GET/POST - gestion usuarios (solo admin)
@@ -302,18 +300,6 @@ Usuario envia solucion
 Todos los endpoints devuelven `Content-Type: application/json`.
 
 ### Endpoints publicos
-
-#### GET /api/get_stats.php
-Estadisticas globales para la pantalla de inicio.
-
-Respuesta:
-```json
-{
-  "retos": 10,
-  "usuarios": 42,
-  "envios": 187
-}
-```
 
 #### GET /api/get_retos.php
 Lista los retos activos. Acepta filtro por dificultad mediante el parametro `dificultad` (valores: `easy`, `medium`, `hard`, `all`).
