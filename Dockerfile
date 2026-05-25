@@ -6,12 +6,6 @@ RUN docker-php-ext-install mysqli pdo pdo_mysql
 # Habilitar mod_rewrite
 RUN a2enmod rewrite
 
-# Instalar Node.js para compilar (opcional)
-RUN apt-get update && apt-get install -y \
-    nodejs \
-    npm \
-    && rm -rf /var/lib/apt/lists/*
-
 # Copiar configuración de Apache
 COPY apache-config.conf /etc/apache2/sites-available/000-default.conf
 
