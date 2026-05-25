@@ -24,15 +24,6 @@ try {
     $casos->execute([$id]);
     $reto['casos_prueba'] = $casos->fetchAll();
 
-    // Estado de resolución si el usuario está logueado
-    $reto['resuelto'] = false;
-    if (isAuthenticated()) {
-        $check = $pdo->prepare("SELECT resuelto FROM soluciones_usuario WHERE usuario_id = ? AND reto_id = ?");
-        $check->execute([$_SESSION['user_id'], $id]);
-        $res = $check->fetch();
-        $reto['resuelto'] = $res ? (bool) $res['resuelto'] : false;
-    }
-
     // Cast de tipos
     $reto['id']          = (int) $reto['id'];
     $reto['puntos']      = (int) $reto['puntos'];

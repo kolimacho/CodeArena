@@ -146,7 +146,6 @@ function renderRetos(retos) {
             <div class="card-top">
                 <span class="categoria">${escapeHtml(r.categoria)}</span>
                 <div style="display:flex;gap:0.4rem;align-items:center">
-                    ${r.resuelto ? '<span class="resuelto-badge">✓</span>' : ''}
                     <span class="dif dif-${r.dificultad}">${difLabel(r.dificultad)}</span>
                 </div>
             </div>
@@ -258,7 +257,6 @@ function renderRetoPanel(reto) {
         <div class="reto-info-bar">
             <span>⏱ ${escapeHtml(reto.tiempo_estimado || '—')}</span>
             <span>✅ ${reto.completados || 0} resueltos</span>
-            ${reto.resuelto ? '<span class="resuelto-tag">✓ Ya resuelto</span>' : ''}
         </div>
         <div class="reto-descripcion">${markdownBasico(reto.descripcion)}</div>
         ${ejemplosHtml}
