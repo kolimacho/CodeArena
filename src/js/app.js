@@ -1,20 +1,24 @@
 // ============================================================
-// APP.JS — Núcleo de CodeArena
+// APP.JS — Núcleo principal de CodeArena.
+// Gestiona: autenticación, navegación entre secciones, carga de retos,
+// ranking, apertura del editor de código y todos los modales.
+// Es una SPA: un solo HTML donde JS muestra/oculta secciones sin recargar.
 // Orden de carga: utils.js → editor.js → evaluator.js → admin.js → app.js
 // ============================================================
 
-// ── Estado global ──────────────────────────────────────────
-let currentUser      = null;   // Usuario con sesión activa (o null)
-let currentRetos     = [];     // Retos cargados en el grid
+// ── Variables globales — estado compartido por todos los archivos JS ────────
+let currentUser      = null;   // Usuario con sesión activa (o null si no hay sesión)
+let currentRetos     = [];     // Retos cargados actualmente en el grid
 let currentRetoId    = null;   // ID del reto abierto en el editor
-let monacoEditor     = null;   // Instancia del editor Monaco
+let monacoEditor     = null;   // Instancia del editor Monaco (se crea en editor.js)
 let monacoReady      = false;  // true cuando Monaco termina de cargar
-let currentTestCases = [];     // Casos de prueba del reto actual
+let currentTestCases = [];     // Casos de prueba del reto abierto (los usa evaluator.js)
 
-let adminSubmissionsData = [];  // Caché de envíos (para admin)
-let adminRetosData       = [];  // Caché de retos (para admin)
+let adminSubmissionsData = [];  // Caché de envíos para el panel admin
+let adminRetosData       = [];  // Caché de retos para el panel admin
 
-// ── Arranque ───────────────────────────────────────────────
+// ── Arranque de la aplicación ───────────────────────────────────────────────
+// Al cargar el DOM: inicia Monaco, comprueba si hay sesión activa y muestra la sección de retos.
 document.addEventListener('DOMContentLoaded', async () => {
     initMonaco();
     await checkAuth();
@@ -22,8 +26,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     setupEventListeners();
 });
 
-// ── Autenticación ──────────────────────────────────────────
+// ── Autenticación ───────────────────────────────────────────────────────────
 
+// Comprueba si hay una sesión PHP activa. Si la hay, guarda el usuario y actualiza la navbar.
 async function checkAuth() {
     try {
         const res  = await fetch('/api/check_auth.php');
@@ -35,6 +40,8 @@ async function checkAuth() {
     } catch (e) { console.error('Auth check failed:', e); }
 }
 
+// Actualiza la navbar: oculta los botones de login/registro y muestra el nombre y puntos del usuario.
+// Si es admin, muestra también el enlace al panel de administración.
 function updateNavForUser(user) {
     document.getElementById('auth-buttons').style.display   = 'none';
     document.getElementById('user-menu').style.display      = 'flex';
@@ -43,6 +50,7 @@ function updateNavForUser(user) {
     if (user.is_admin) document.getElementById('nav-admin').style.display = 'block';
 }
 
+// Envía las credenciales al servidor (POST /api/login.php). Si son correctas, guarda el usuario y cierra el modal.
 async function login(username, password) {
     const btn = document.getElementById('login-submit');
     btn.textContent = 'Entrando...';
@@ -70,6 +78,7 @@ async function login(username, password) {
     }
 }
 
+// Crea una cuenta nueva (POST /api/register.php). Si tiene éxito, inicia sesión automáticamente.
 async function register(username, email, password) {
     const btn = document.getElementById('register-submit');
     btn.textContent = 'Creando cuenta...';
@@ -97,6 +106,7 @@ async function register(username, email, password) {
     }
 }
 
+// Cierra la sesión en el servidor (POST /api/logout.php) y restaura la navbar al estado de invitado.
 async function logout() {
     await fetch('/api/logout.php', { method: 'POST' });
     currentUser = null;
@@ -108,8 +118,10 @@ async function logout() {
     loadRetos();
 }
 
-// ── Navegación ────────────────────────────────────────────
+// ── Navegación SPA ──────────────────────────────────────────────────────────
 
+// Muestra la sección indicada y oculta todas las demás. Carga los datos si es necesario.
+// Secciones disponibles: 'hero', 'retos', 'ranking', 'admin'.
 function showSection(name) {
     ['hero', 'retos', 'ranking', 'admin'].forEach(s => {
         const el = document.getElementById('section-' + s);
@@ -123,8 +135,9 @@ function showSection(name) {
     }
 }
 
-// ── Retos ─────────────────────────────────────────────────
+// ── Retos ───────────────────────────────────────────────────────────────────
 
+// Pide los retos al servidor (GET /api/get_retos.php) y los pinta en el grid.
 async function loadRetos(dificultad = 'all') {
     const grid = document.getElementById('grid');
     grid.innerHTML = '<div class="loading"><div class="spinner"></div>Cargando retos...</div>';
@@ -138,6 +151,7 @@ async function loadRetos(dificultad = 'all') {
     } catch (e) { grid.innerHTML = '<p class="error-msg">Error al cargar los retos.</p>'; }
 }
 
+// Genera el HTML de las tarjetas de retos y las inserta en el div #grid.
 function renderRetos(retos) {
     const grid = document.getElementById('grid');
     if (!retos.length) { grid.innerHTML = '<p class="empty-msg">No hay retos en esta categoría.</p>'; return; }
@@ -161,14 +175,16 @@ function renderRetos(retos) {
         </div>`).join('');
 }
 
+// Cambia el filtro de dificultad activo y recarga los retos con el nuevo filtro.
 function filtrarRetos(dificultad, btn) {
     document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('activo'));
     btn.classList.add('activo');
     loadRetos(dificultad);
 }
 
-// ── Ranking ───────────────────────────────────────────────
+// ── Ranking ─────────────────────────────────────────────────────────────────
 
+// Pide el ranking al servidor (GET /api/get_ranking.php) y lo pinta en la tabla.
 async function loadRanking() {
     const tabla = document.getElementById('ranking-tabla');
     tabla.innerHTML = '<div class="loading"><div class="spinner"></div>Cargando ranking...</div>';
@@ -179,6 +195,7 @@ async function loadRanking() {
     } catch (e) { tabla.innerHTML = '<p class="error-msg">Error al cargar el ranking.</p>'; }
 }
 
+// Genera el HTML de la tabla de ranking con medallas para los 3 primeros. Resalta la fila del usuario actual.
 function renderRanking(ranking) {
     const tabla = document.getElementById('ranking-tabla');
     if (!ranking.length) {
@@ -203,8 +220,10 @@ function renderRanking(ranking) {
     tabla.innerHTML = header + rows;
 }
 
-// ── Modal del reto ────────────────────────────────────────
+// ── Modal del editor de reto ────────────────────────────────────────────────
 
+// Abre el modal a pantalla completa con el editor. Carga los datos del reto desde la API
+// y prepara Monaco con la plantilla correcta (parámetros extraídos del primer test case).
 async function abrirReto(retoId) {
     currentRetoId = retoId;
     document.getElementById('retoModal').style.display = 'flex';
@@ -220,6 +239,7 @@ async function abrirReto(retoId) {
         currentTestCases = reto.casos_prueba || [];
         renderRetoPanel(reto);
 
+        // Extrae los nombres de los parámetros del primer test case para la plantilla.
         const params = currentTestCases.length ? Object.keys(JSON.parse(currentTestCases[0].input)) : [];
         if (monacoReady && monacoEditor) {
             monacoEditor.setValue(getStarterTemplate(params));
@@ -232,6 +252,7 @@ async function abrirReto(retoId) {
     }
 }
 
+// Rellena el panel izquierdo del editor con la descripción, ejemplos e info del reto.
 function renderRetoPanel(reto) {
     document.getElementById('reto-header-info').innerHTML = `
         <span class="dif dif-${reto.dificultad}">${difLabel(reto.dificultad)}</span>
@@ -239,6 +260,7 @@ function renderRetoPanel(reto) {
         <span class="reto-pts-badge">+${reto.puntos} pts</span>
         <span class="reto-cat">${escapeHtml(reto.categoria)}</span>`;
 
+    // Solo muestra los test cases marcados como ejemplo (es_ejemplo = 1).
     const ejemplos = (reto.casos_prueba || []).filter(c => c.es_ejemplo == 1);
     const ejemplosHtml = ejemplos.length ? `
         <div class="ejemplos"><h4>Ejemplos</h4>
@@ -262,6 +284,7 @@ function renderRetoPanel(reto) {
         <div class="reto-nota"><strong>Nota:</strong> Solo JavaScript se evalúa en el navegador.</div>`;
 }
 
+// Cierra el modal del editor y resetea el estado del reto actual.
 function closeRetoModal() {
     document.getElementById('retoModal').style.display = 'none';
     document.body.style.overflow = '';
@@ -270,37 +293,43 @@ function closeRetoModal() {
     closeTestPanel();
 }
 
-// ── Modales ───────────────────────────────────────────────
+// ── Modales ─────────────────────────────────────────────────────────────────
 
+// Abre el modal de login y enfoca el campo de usuario.
 window.showLoginModal = function () {
     document.getElementById('loginModal').style.display  = 'flex';
     document.getElementById('login-error').style.display = 'none';
     setTimeout(() => document.getElementById('login-username').focus(), 100);
 };
 
+// Abre el modal de registro y enfoca el campo de nombre de usuario.
 window.showRegisterModal = function () {
     document.getElementById('registerModal').style.display  = 'flex';
     document.getElementById('register-error').style.display = 'none';
     setTimeout(() => document.getElementById('reg-username').focus(), 100);
 };
 
+// Oculta el modal con el id indicado.
 function closeModal(id) {
     document.getElementById(id).style.display = 'none';
 }
 
+// Cierra un modal y abre otro (usado para pasar de login a registro y viceversa).
 function switchModal(from, to) {
     closeModal(from);
     document.getElementById(to).style.display = 'flex';
 }
 
+// Muestra un mensaje de error dentro de un formulario (login o registro).
 function showFormError(id, msg) {
     const el = document.getElementById(id);
     el.textContent   = msg;
     el.style.display = 'block';
 }
 
-// ── Eventos ───────────────────────────────────────────────
+// ── Eventos ─────────────────────────────────────────────────────────────────
 
+// Registra todos los event listeners: formularios de login/registro, cierre de modales con ESC o clic fuera.
 function setupEventListeners() {
     document.getElementById('loginForm').addEventListener('submit', e => {
         e.preventDefault();
@@ -319,12 +348,12 @@ function setupEventListeners() {
 
     document.getElementById('retoAdminForm').addEventListener('submit', guardarReto);
 
-    // Cerrar modal al hacer clic en el fondo oscuro
+    // Clic en el fondo oscuro del modal lo cierra.
     document.querySelectorAll('.modal').forEach(modal => {
         modal.addEventListener('click', e => { if (e.target === modal) closeModal(modal.id); });
     });
 
-    // Tecla ESC cierra modales
+    // Tecla ESC cierra el editor de reto o cualquier modal abierto.
     document.addEventListener('keydown', e => {
         if (e.key !== 'Escape') return;
         if (document.getElementById('retoModal').style.display === 'flex') closeRetoModal();
@@ -334,7 +363,9 @@ function setupEventListeners() {
     });
 }
 
-// ── Exposición global (usadas en onclick del HTML) ────────
+// ── Exposición global ────────────────────────────────────────────────────────
+// Las funciones usadas en atributos onclick del HTML deben estar en window.
+// De lo contrario, el HTML no puede encontrarlas porque están en scope de módulo.
 window.abrirReto          = abrirReto;
 window.filtrarRetos        = filtrarRetos;
 window.closeRetoModal      = closeRetoModal;

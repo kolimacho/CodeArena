@@ -1,11 +1,16 @@
 // ============================================================
-// EDITOR.JS — Monaco Editor: inicialización y configuración
+// EDITOR.JS — Inicialización y configuración de Monaco Editor.
+// Monaco es el mismo editor de VS Code, cargado desde CDN.
+// Se carga una sola vez al arrancar la app y queda listo para todos los retos.
 // ============================================================
 
+// Inicializa Monaco Editor: define el tema visual personalizado ('codearena') y crea la instancia en el div #monaco-container.
+// Se llama una sola vez desde app.js en el evento DOMContentLoaded.
 function initMonaco() {
     require(['vs/editor/editor.main'], () => {
         monacoReady = true;
 
+        // Tema propio basado en 'vs-dark': fondo negro, keywords en verde, strings en amarillo, números en naranja.
         monaco.editor.defineTheme('codearena', {
             base: 'vs-dark',
             inherit: true,
@@ -26,6 +31,7 @@ function initMonaco() {
             }
         });
 
+        // Crea el editor dentro de #monaco-container con lenguaje JavaScript fijo y el tema personalizado.
         monacoEditor = monaco.editor.create(document.getElementById('monaco-container'), {
             value: '',
             language: 'javascript',
@@ -46,10 +52,9 @@ function initMonaco() {
     });
 }
 
-/**
- * Devuelve la plantilla inicial de JavaScript con los parámetros del reto.
- * @param {string[]} params - nombres de los parámetros extraídos del primer test case
- */
+// Genera la plantilla inicial que ve el usuario al abrir un reto.
+// Los nombres de los parámetros se extraen automáticamente del primer test case del reto.
+// Ejemplo: si el input es {"s":"hello"} → genera function solution(s) { ... }
 function getStarterTemplate(params = []) {
     const paramStr = params.length ? params.join(', ') : '/* parámetros */';
     return `function solution(${paramStr}) {\n    // Escribe tu código aquí\n    \n}`;

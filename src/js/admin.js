@@ -1,9 +1,12 @@
 // ============================================================
-// ADMIN.JS — Panel de administración
+// ADMIN.JS — Panel de administración (solo accesible si is_admin = true).
+// Gestiona tres pestañas: Envíos, Usuarios y Retos.
+// Cada pestaña tiene su propia función de carga y de renderizado.
 // ============================================================
 
-// ── Envíos ──────────────────────────────────────────────────
+// ── Envíos ──────────────────────────────────────────────────────────────────
 
+// Carga todos los envíos desde el servidor con filtro opcional por resultado (success/failed/pending).
 async function loadAdminSubmissions() {
     const container = document.getElementById('submissions-container');
     container.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
@@ -22,6 +25,7 @@ async function loadAdminSubmissions() {
     }
 }
 
+// Genera la tabla HTML con todos los envíos: usuario, reto, resultado, tests pasados, puntos y fecha.
 function renderAdminSubmissions(submissions) {
     const container = document.getElementById('submissions-container');
     if (!submissions.length) {
@@ -52,6 +56,7 @@ function renderAdminSubmissions(submissions) {
         </table>`;
 }
 
+// Abre un modal con el código fuente de un envío concreto. Llama a la API con el ID del envío.
 async function verCodigo(envioId) {
     document.getElementById('codigoModal').style.display = 'flex';
     document.getElementById('codigo-meta').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
@@ -72,7 +77,7 @@ async function verCodigo(envioId) {
                 <span><strong>Fecha:</strong> ${formatDate(s.created_at)}</span>
             </div>`;
 
-        // Mostrar el código en un <pre> simple (sin Monaco)
+        // Muestra el código en un <pre> con escapeHtml para que no se interprete como HTML.
         document.getElementById('codigo-viewer').innerHTML =
             '<pre class="codigo-pre">' + escapeHtml(s.codigo) + '</pre>';
 
@@ -81,8 +86,9 @@ async function verCodigo(envioId) {
     }
 }
 
-// ── Usuarios ─────────────────────────────────────────────────
+// ── Usuarios ─────────────────────────────────────────────────────────────────
 
+// Carga la lista de todos los usuarios desde el servidor (GET /api/admin_users.php).
 async function loadAdminUsers() {
     const container = document.getElementById('users-container');
     container.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
@@ -97,6 +103,7 @@ async function loadAdminUsers() {
     }
 }
 
+// Genera la tabla de usuarios con su email, puntos, retos resueltos, rol y botón para cambiar el rol.
 function renderAdminUsers(users) {
     const container = document.getElementById('users-container');
     if (!users.length) {
@@ -131,6 +138,7 @@ function renderAdminUsers(users) {
         </table>`;
 }
 
+// Cambia el rol de un usuario entre admin y usuario normal (POST /api/admin_users.php).
 async function toggleAdmin(userId, isAdmin) {
     if (!confirm('¿Cambiar el rol de este usuario?')) return;
     try {
@@ -145,8 +153,9 @@ async function toggleAdmin(userId, isAdmin) {
     } catch (e) { showToast('Error de conexión', 'error'); }
 }
 
-// ── Retos ─────────────────────────────────────────────────────
+// ── Retos ─────────────────────────────────────────────────────────────────────
 
+// Carga la lista de todos los retos (activos e inactivos) desde el servidor.
 async function loadAdminRetos() {
     const container = document.getElementById('challenges-container');
     container.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
@@ -162,6 +171,7 @@ async function loadAdminRetos() {
     }
 }
 
+// Genera la tabla de retos con dificultad, puntos, resueltos, estado y botones de editar/eliminar.
 function renderAdminRetos(retos) {
     const container = document.getElementById('challenges-container');
     if (!retos.length) {
@@ -193,6 +203,8 @@ function renderAdminRetos(retos) {
         </table>`;
 }
 
+// Abre el formulario modal para crear un reto nuevo o editar uno existente.
+// Si se pasa un reto, rellena los campos con sus datos; si no, los deja vacíos.
 function showRetoAdminModal(reto = null) {
     document.getElementById('admin-reto-modal-title').textContent = reto ? 'Editar reto' : 'Nuevo reto';
     document.getElementById('admin-reto-id').value          = reto?.id          ?? '';
@@ -205,11 +217,13 @@ function showRetoAdminModal(reto = null) {
     document.getElementById('retoAdminModal').style.display = 'flex';
 }
 
+// Busca el reto en la caché local (adminRetosData) y abre el formulario de edición con sus datos.
 function editarReto(id) {
     const reto = adminRetosData.find(r => r.id === id);
     if (reto) showRetoAdminModal(reto);
 }
 
+// Elimina un reto (soft delete en el servidor: activo = 0). Pide confirmación antes.
 async function eliminarReto(id) {
     if (!confirm('¿Eliminar este reto?')) return;
     try {
@@ -220,6 +234,7 @@ async function eliminarReto(id) {
     } catch (e) { showToast('Error de conexión', 'error'); }
 }
 
+// Guarda un reto nuevo (POST) o actualiza uno existente (PUT) según si tiene id o no.
 async function guardarReto(e) {
     e.preventDefault();
     const id = document.getElementById('admin-reto-id').value;
@@ -251,6 +266,7 @@ async function guardarReto(e) {
     } catch (e) { showToast('Error de conexión', 'error'); }
 }
 
+// Cambia la pestaña activa del panel admin y carga los datos correspondientes.
 function switchAdminTab(tab, btn) {
     document.querySelectorAll('.admin-tab').forEach(b => b.classList.remove('activo'));
     btn.classList.add('activo');
