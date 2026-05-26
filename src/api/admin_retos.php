@@ -1,10 +1,19 @@
 <?php
+// ============================================================
+// ADMIN_RETOS.PHP — CRUD completo de retos desde el panel de administración.
+// GET    → lista todos los retos (activos e inactivos).
+// POST   → crea un reto nuevo.
+// PUT    → actualiza un reto existente.
+// DELETE → soft delete (pone activo=0, no borra el registro físicamente).
+// Solo accesible por administradores (requireAdmin).
+// ============================================================
+
 require_once 'config.php';
 requireAdmin();
 
 $method = $_SERVER['REQUEST_METHOD'];
 
-// GET — listar todos los retos (activos e inactivos)
+// GET — lista todos los retos, incluyendo los inactivos (a diferencia de get_retos.php público).
 if ($method === 'GET') {
     $stmt = $pdo->query("
         SELECT id, titulo, categoria, dificultad, puntos, tiempo_estimado,
@@ -14,6 +23,7 @@ if ($method === 'GET') {
     ");
     $retos = $stmt->fetchAll();
 
+    // Cast de tipos para que el JSON tenga int y bool en lugar de strings.
     foreach ($retos as &$r) {
         $r['id']         = (int) $r['id'];
         $r['puntos']     = (int) $r['puntos'];
@@ -25,7 +35,7 @@ if ($method === 'GET') {
     exit();
 }
 
-// POST — crear nuevo reto
+// POST — crea un reto nuevo; valida campos obligatorios y que la dificultad sea válida.
 if ($method === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
 
@@ -42,6 +52,7 @@ if ($method === 'POST') {
         exit();
     }
 
+    // Sanea la dificultad: si no es un valor válido se fuerza a 'easy'.
     if (!in_array($dificultad, ['easy', 'medium', 'hard'])) {
         $dificultad = 'easy';
     }
@@ -52,11 +63,12 @@ if ($method === 'POST') {
     );
     $stmt->execute([$titulo, $categoria, $dificultad, $puntos, $tiempo, $descripcion]);
 
+    // Devuelve el id generado para que el frontend pueda actualizar la lista sin recargar.
     echo json_encode(['success' => true, 'id' => $pdo->lastInsertId()]);
     exit();
 }
 
-// PUT — actualizar reto existente
+// PUT — actualiza todos los campos de un reto existente; requiere id en el cuerpo JSON.
 if ($method === 'PUT') {
     $data = json_decode(file_get_contents('php://input'), true);
     $id   = (int) ($data['id'] ?? 0);
@@ -95,7 +107,7 @@ if ($method === 'PUT') {
     exit();
 }
 
-// DELETE — eliminar reto (soft delete: activo=0)
+// DELETE — soft delete: pone activo=0. El reto desaparece para los usuarios pero no se pierde el historial.
 if ($method === 'DELETE') {
     $id = (int) ($_GET['id'] ?? 0);
 

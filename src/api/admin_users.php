@@ -1,8 +1,17 @@
 <?php
+// ============================================================
+// ADMIN_USERS.PHP — Gestiona usuarios desde el panel de administración.
+// GET  → devuelve todos los usuarios con estadísticas (resueltos, envíos totales).
+// POST → cambia el rol is_admin de un usuario.
+// Solo accesible por administradores (requireAdmin).
+// ============================================================
+
 require_once 'config.php';
 requireAdmin();
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    // COALESCE en subconsultas correlacionadas para evitar NULL si el usuario no tiene datos.
+    // Devuelve todos los usuarios (también los sin actividad), ordenados por puntos.
     $stmt = $pdo->query("
         SELECT
             u.id, u.username, u.email, u.puntos_total, u.is_admin,
@@ -20,6 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     ");
     $users = $stmt->fetchAll();
 
+    // Cast de tipos: PHP devuelve todo como string desde MySQL.
     foreach ($users as &$u) {
         $u['id']           = (int) $u['id'];
         $u['puntos_total'] = (int) $u['puntos_total'];
@@ -43,12 +53,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    // Evitar que el admin se quite sus propios permisos
+    // Protección: un admin no puede quitarse sus propios permisos (quedaría bloqueado).
     if ($user_id === (int) $_SESSION['user_id'] && $is_admin === 0) {
         echo json_encode(['error' => 'No puedes quitarte tus propios permisos de admin']);
         exit();
     }
 
+    // Actualiza el rol del usuario si se proporcionó el campo is_admin.
     if ($is_admin !== null) {
         $pdo->prepare("UPDATE usuarios SET is_admin = ? WHERE id = ?")->execute([$is_admin, $user_id]);
     }

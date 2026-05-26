@@ -1,14 +1,19 @@
 <?php
+// ============================================================
+// ADMIN_SUBMISSIONS.PHP — Gestiona el listado y detalle de envíos. Solo acepta GET.
+// Modo detalle:  ?id=X  → devuelve un envío concreto con JOIN de usuario y reto.
+// Modo listado:  sin id  → top 100-500 envíos con filtro opcional por resultado.
+// Solo accesible por administradores (requireAdmin).
+// ============================================================
+
 require_once 'config.php';
 requireAdmin();
 
-// GET ?id=X → detalle de un envío
-// GET       → listado con filtros opcionales
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $id = (int) ($_GET['id'] ?? 0);
 
     if ($id) {
-        // Detalle de un envío concreto
+        // Detalle de un envío concreto: JOIN con usuarios y retos para mostrar nombres.
         $stmt = $pdo->prepare("
             SELECT e.*, u.username, r.titulo AS reto_titulo
             FROM envios e
@@ -29,7 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         exit();
     }
 
-    // Listado con filtro opcional por resultado
+    // Listado: filtro opcional por resultado ('success' | 'failed').
+    // min() limita el límite a 500 para evitar respuestas demasiado grandes.
     $resultado = $_GET['resultado'] ?? '';
     $limit     = min((int) ($_GET['limit'] ?? 100), 500);
 
@@ -48,6 +54,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     ");
 
     if ($resultado) $stmt->bindValue(':resultado', $resultado);
+    // PDO::PARAM_INT es necesario para LIMIT — PDO trata los parámetros como strings por defecto
+    // y MySQL no acepta strings en LIMIT dentro de prepared statements.
     $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
     $stmt->execute();
 
